@@ -23,22 +23,21 @@ def create_season(rounds):
     from game import Game
 
     def create_game(round):
+        # TODO: Handle BYE when no time data is given
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
-        dt = round.find("span", {"class":"sc-bqGHjH keiYNe"}).text
-        loc = round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"})
+        dt = round.find("span", {"class":"sc-bqGHjH cUXLAP"}).text
         loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
         tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
-        res = round.find("span", {"class":"sc-bqGHjH sc-10c3c88-10 cUXLAP cbKOhL"})
-        return Game(rnd, dt, loc, tms, res)
+        return Game(rnd, dt, loc, tms)
 
     season = []
-    for round in rounds:
-        gm = create_game(round)
-        season.append(gm)
+    for round in rounds[:]:
+        print(round.prettify())
+        season.append(create_game(round))
         
     
     return season
 
 
 season = create_season(rounds)
-print(season[0].teams)
+print(season[0].date_time)
