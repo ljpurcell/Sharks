@@ -13,12 +13,32 @@ URL = "https://www.playhq.com/basketball-victoria/org/sharks-basketball-club-gee
 
 page = scrape_site(URL)
 
-print(page.text)
-
 from bs4 import BeautifulSoup
 soup = BeautifulSoup(page.content, "html.parser")
 
-fixture = soup.find('div', {"data-testid": "fixture-list"})
+rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 
-print(fixture.prettify())
+
+def create_season(rounds):
+    from game import Game
+
+    def create_game(round):
+        rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
+        dt = round.find("span", {"class":"sc-bqGHjH keiYNe"}).text
+        loc = round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"})
+        loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
+        tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
+        res = round.find("span", {"class":"sc-bqGHjH sc-10c3c88-10 cUXLAP cbKOhL"})
+        return Game(rnd, dt, loc, tms, res)
+
+    season = []
+    for round in rounds:
+        gm = create_game(round)
+        season.append(gm)
+        
     
+    return season
+
+
+season = create_season(rounds)
+print(season[0].teams)
