@@ -7,8 +7,6 @@ def scrape_site(url):
     return requests.get(url, headers=headers)
 
 
-
-
 URL = "https://www.playhq.com/basketball-victoria/org/sharks-basketball-club-geelong/b78f41ba/gub-community-competitions-summer-202223/teams/bull-sharks-div2-men/4b014ac5"
 
 page = scrape_site(URL)
@@ -22,17 +20,29 @@ rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 def create_season(rounds):
     from game import Game
 
+    def get_date_time(round):
+        import datetime
+        dt = round.find("span", {"class":"sc-bqGHjH cUXLAP"})
+        if dt != None:
+            # Game is not a BYE and has both date and time
+            return datetime.datetime.strptime(dt.text, "%I:%M %p, %a, %d %b %y")
+        else:
+            # Game is a BYE and just has a date
+            d = round.find("span", {"class":"sc-bqGHjH keiYNe"})
+            return datetime.datetime.strptime(d.text, "%A, %d %B %Y")
+
+
     def create_game(round):
         # TODO: Handle BYE when no time data is given
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
-        dt = round.find("span", {"class":"sc-bqGHjH cUXLAP"}).text
+        dt = get_date_time(round)
         loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
         tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
         return Game(rnd, dt, loc, tms)
 
     season = []
-    for round in rounds[:]:
-        print(round.prettify())
+    for round in rounds[-3:]:
+        print(round.prettify() + '\n'*2)
         season.append(create_game(round))
         
     
@@ -40,4 +50,4 @@ def create_season(rounds):
 
 
 season = create_season(rounds)
-print(season[0].date_time)
+print(season[2].date_time)
