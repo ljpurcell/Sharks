@@ -33,7 +33,6 @@ def create_season(rounds):
 
 
     def create_game(round):
-        # TODO: Handle BYE when no time data is given
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
         dt = get_date_time(round)
         loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
@@ -41,8 +40,7 @@ def create_season(rounds):
         return Game(rnd, dt, loc, tms)
 
     season = []
-    for round in rounds[-3:]:
-        print(round.prettify() + '\n'*2)
+    for round in rounds:
         season.append(create_game(round))
         
     
@@ -50,4 +48,3 @@ def create_season(rounds):
 
 
 season = create_season(rounds)
-print(season[2].date_time)
