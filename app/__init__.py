@@ -22,19 +22,15 @@ def create_app(test_config=None):
         pass
 
  
-    from . import db
+    from . import db, auth
     db.init_app(app)
+    app.register_blueprint(auth.bp)
 
     """PAGES"""
     # entry point
     @app.route('/prove-yourself')
     def prove_yourself():
         return "Coming soon" # render_template('prove.html')
-
-    # add user
-    @app.route('/register')
-    def login():
-        return "Coming soon" # render_template('register.html')
 
     # next game details
     @app.route('/next-game')
