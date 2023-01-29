@@ -33,8 +33,7 @@ def create_season(rounds):
 
     def get_teams(round):
         tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
-        return len(tms)
-
+        return "Bull Sharks - BYE" if len(tms) < 2 else f"{tms[0].text} vs. {tms[1].text}"
 
     def create_game(round):
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text

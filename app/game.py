@@ -3,7 +3,9 @@ class Game:
         import datetime
         self.round = round
         self.date_time = date_time
-        self.date_time_str = self.date_time.strftime("%I:%M %p, %a, %d %b %y")
+        self.time_str = self.date_time.strftime("%I:%M %p") 
+        self.date_str = self.date_time.strftime("%A %d/%b/%y")
         self.location = location
         self.teams = teams
         self.been_played = self.date_time < datetime.datetime.now()
+        self.is_bye = self.location == "BYE"

@@ -3,18 +3,18 @@ from os.path import join
 from twilio.rest import Client
 from dotenv import load_dotenv
 
+# TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = join('/Users/LJPurcell/Code/Sharks/.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-account_sid = "AC43d1269aaba5977f6cff209fba752f99"
-auth_token = env["TWILIO_AUTH_TOKEN"]
-client = Client(account_sid, auth_token)
+client = Client(env["TWILIO_ACCOUNT_SID"], env["TWILIO_AUTH_TOKEN"])
 
-from scraper import Season
+from next_game import NextGame
 
-game = Season[0]
-
-message_body = "First game was:\n" + game.round + ", on " + game.date_time_str + ", at " + game.location + " between " + str(game.teams) + " and it is " + str(game.been_played) + " this game has been played."
+if NextGame.is_bye:
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams
+else:
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + "\n" + NextGame.time_str + " at " + NextGame.location
 
 message = client.messages.create(
   body=message_body,
