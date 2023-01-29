@@ -31,12 +31,16 @@ def create_season(rounds):
             d = round.find("span", {"class":"sc-bqGHjH keiYNe"})
             return datetime.strptime(d.text, "%A, %d %B %Y")
 
+    def get_teams(round):
+        tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
+        return len(tms)
+
 
     def create_game(round):
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
         dt = get_date_time(round)
         loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
-        tms = round.find_all("a", {"class":"sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
+        tms = get_teams(round)
         return Game(rnd, dt, loc, tms)
 
     season = []
@@ -47,5 +51,4 @@ def create_season(rounds):
     return season
 
 
-season = create_season(rounds)
-print("Seemed to work" + season[0].round)
+Season = create_season(rounds)

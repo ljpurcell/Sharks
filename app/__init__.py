@@ -26,11 +26,6 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
 
-    # # entry point
-    # @app.route('/prove-yourself')
-    # def prove_yourself():
-    #     return render_template('prove.html')
-
     # # next game details
     # @app.route('/next-game')
     # def next_game():
