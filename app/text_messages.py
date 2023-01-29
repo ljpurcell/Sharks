@@ -18,8 +18,8 @@ else:
 
 message = client.messages.create(
   body=message_body,
-  from_="+15154617756",
-  to="+61447915198"
+  from_=env["TWILIO_PHONE_NUMBER"],
+  to=env["MY_NUMBER"]
 )
 
 print(message.sid)
