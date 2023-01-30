@@ -21,5 +21,3 @@ message = client.messages.create(
   from_=env["TWILIO_PHONE_NUMBER"],
   to=env["MY_NUMBER"]
 )
-
-print(message.sid)
