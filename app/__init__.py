@@ -1,8 +1,11 @@
 import os
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    bootstrap = Bootstrap(app)
+
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'sharks.sqlite'),
@@ -30,5 +33,13 @@ def create_app(test_config=None):
     # @app.route('/next-game')
     # def next_game():
     #     return render_template('next.html')
+
+    @app.errorhandler(404) 
+        def page_not_found(e):
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+        def internal_server_error(e):
+        return render_template('500.html'), 500
 
     return app

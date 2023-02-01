@@ -1,25 +1,25 @@
-<!DOCTYPE html>
-<title>{% block title %}{% endblock %} - BullSharks app</title>
+{% extends "bootstrap/base.html" %} {% block title %}Flasky{% endblock %} {%
+block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+  <div class="container"></div>
+</div>
+<div class="navbar-header">
+<button type="button" class="navbar-toggle"
+data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span> </button>
+<a class="navbar-brand" href="/">BullSharks</a>
+</div>
 
-<nav>
-    <h1>BullSharks app</h1>
-    <ul>
-        {% if g.user %}
-        <li><span>{{ g.user['username'] }}</span></li>
-        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-        {% else %}
-        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-        {% endif %}
-    </ul>
-</nav>
-<section class="content">
-    <header>
-        {% block header %}
-        {% endblock %}
-    </header>
-    {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-</section>
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav"> <li><a href="/">Home</a></li>
+</ul> 
+</div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+{% block page_content %}{% endblock %}
+</div>
+{% endblock %}
