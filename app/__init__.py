@@ -29,17 +29,17 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
 
-    # # next game details
-    # @app.route('/next-game')
-    # def next_game():
-    #     return render_template('next.html')
+    # next game details
+    @app.route('/next-game')
+    def next_game():
+        return render_template('next.html')
 
     @app.errorhandler(404) 
-        def page_not_found(e):
-        return render_template('404.html'), 404
+    def page_not_found(e):
+        return render_template('errors/404.html'), 404
 
     @app.errorhandler(500)
-        def internal_server_error(e):
-        return render_template('500.html'), 500
+    def internal_server_error(e):
+        return render_template('errors/500.html'), 500
 
     return app
