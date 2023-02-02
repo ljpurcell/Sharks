@@ -31,6 +31,10 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
 
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
     @app.route('/login')
     def login():
         return render_template('auth/login.html')
@@ -44,7 +48,6 @@ def create_app(test_config=None):
         from .next_and_prev_game import NextGame
         return render_template('next.html', next_game=NextGame)
 
-    # next game details
     @app.route('/votes')
     def votes():
         from .next_and_prev_game import PrevGame

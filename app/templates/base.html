@@ -1,26 +1,19 @@
-{% extends "bootstrap/base.html" %} {% block title %}Flasky{% endblock %} {%
-block navbar %}
+{% extends "bootstrap/base.html" %} {% block title %} SharksApp {% endblock %}
+{% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button
-        type="button"
-        class="navbar-toggle"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-      >
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">BullSharks</a>
+      <a class="navbar-brand" href={{ url_for('index') }}>BullSharks</a>
     </div>
 
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/">Home</a></li>
+        <li><a href={{ url_for('votes') }}>Votes</a></li>
+        <li><a href={{ url_for('next_game') }}>Next game</a></li>
       </ul>
+      <div>
+        <a href={{ url_for('login') }}>Login</a>
+      </div>
     </div>
   </div>
 </div>
