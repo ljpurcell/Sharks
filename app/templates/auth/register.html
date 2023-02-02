@@ -1,15 +1,22 @@
-{% extends 'base.html' %}
-
-{% block header %}
-    <h1>{% block title %} Register {% endblock %}</h1>
-{% endblock %}
-
-{% block content %}
-    <form method="POST">
-        <label for="username" class="text-green-500">Username</label>
-        <input type="text" name="username" id="username" autocomplete="none" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <input type="submit" value="Register">
-    </form>
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %} Register {% endblock %}</h1>
+{% endblock %} {% block content %}
+<form method="POST">
+  <label for="username" class="text-green-500">Username</label>
+  <input
+    type="text"
+    name="username"
+    id="username"
+    autocomplete="none"
+    required
+  />
+  <label for="password">Password</label>
+  <input type="password" name="password" id="password" required />
+  <label for="macs-number">
+    What was Mackenzie Bourke's number in his innuagral breakout season with the
+    Bull Sharks?
+  </label>
+  <input type="number" name="macs-number" id="macs-number" required />
+  <input type="submit" value="Register" />
+</form>
 {% endblock %}

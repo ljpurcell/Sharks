@@ -30,13 +30,25 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
 
-    
 
-    # next game details
+    @app.route('/login')
+    def login():
+        return render_template('auth/login.html')
+
+    @app.route('/register')
+    def register():
+        return render_template('auth/register.html')
+
     @app.route('/next-game', methods=['GET'])
     def next_game():
-        from .next_game import NextGame
+        from .next_and_prev_game import NextGame
         return render_template('next.html', next_game=NextGame)
+
+    # next game details
+    @app.route('/votes')
+    def votes():
+        from .next_and_prev_game import PrevGame
+        return render_template('votes.html', prev_game=PrevGame)
 
     @app.errorhandler(404) 
     def page_not_found(e):

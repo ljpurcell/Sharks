@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block title %} Bullsharks - Votes {% endblock %} {%
+block page_content %}
+<div class="page-header"><h1>Votes for {{ prev_game.round }}</h1></div>
+<h3>Game details:</h3>
+<div>
+  <ul>
+    <li>{{ prev_game.date_str }}</li>
+    <li>{{ prev_game.time_str }}</li>
+    <li>{{ prev_game.teams }}</li>
+  </ul>
+</div>
+<!-- Select players and number of votes from drop down list. Only show until total of 3 votes -->
+<!-- Add ability to add comments and noteworthy moments for season end -->
+<input type="text" />
+{% endblock %}
