@@ -1,8 +1,9 @@
 import os
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
+
 
 def create_app(test_config=None):
+    from flask_bootstrap import Bootstrap
     app = Flask(__name__, instance_relative_config=True)
     bootstrap = Bootstrap(app)
 
@@ -29,10 +30,13 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
 
+    
+
     # next game details
-    @app.route('/next-game')
+    @app.route('/next-game', methods=['GET'])
     def next_game():
-        return render_template('next.html')
+        from .next_game import NextGame
+        return render_template('next.html', next_game=NextGame)
 
     @app.errorhandler(404) 
     def page_not_found(e):
