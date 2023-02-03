@@ -51,7 +51,8 @@ def create_app(test_config=None):
     @app.route('/votes')
     def votes():
         from .next_and_prev_game import PrevGame
-        return render_template('votes.html', prev_game=PrevGame)
+        team = ["Lyndon Purcell", "Michael Walter", "Ian Johnson"] # Create get_team()
+        return render_template('votes.html', prev_game=PrevGame, team=team, total_votes=0)
 
     @app.errorhandler(404) 
     def page_not_found(e):

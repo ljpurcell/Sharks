@@ -2,21 +2,34 @@
 <h1>{% block title %} Register {% endblock %}</h1>
 {% endblock %} {% block content %}
 <form method="POST">
-  <label for="username" class="text-green-500">Username</label>
-  <input
-    type="text"
-    name="username"
-    id="username"
-    autocomplete="none"
-    required
-  />
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" required />
+  <div class="form-group">
+    <label for="">Name</label>
+    <input type="" class="form-control" id="" placeholder="" />
+  </div>
+  <div class="form-group">
+    <label for="">Password</label>
+    <input type="password" class="form-control" id="" placeholder="" />
+  </div>
+  <div class="form-group">
+    <label for="">Email</label>
+    <input type="" class="form-control" id="" placeholder="" />
+  </div>
+  <div class="form-group">
+    <label for="">Mobile</label>
+    <input type="" class="form-control" id="" placeholder="" />
+  </div>
+
   <label for="macs-number">
     What was Mackenzie Bourke's number in his innuagral breakout season with the
     Bull Sharks?
   </label>
   <input type="number" name="macs-number" id="macs-number" required />
-  <input type="submit" value="Register" />
+
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input" id="" />
+    <label class="form-check-label" for="">I get buckets</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}

@@ -9,7 +9,24 @@ block page_content %}
     <li>{{ prev_game.teams }}</li>
   </ul>
 </div>
-<!-- Select players and number of votes from drop down list. Only show until total of 3 votes -->
-<!-- Add ability to add comments and noteworthy moments for season end -->
-<input type="text" />
+
+<form class="" action="" method="post">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="player">Player</label>
+       <select class="">
+      {% for player in team %}
+      <option>{{ player }}</option>
+      {% endfor %}
+    </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="votes">Votes</label>
+      <select class="">
+      {% for i in range(1, 4 - total_votes) %}
+      <option>{{ i }}</option>
+      {% endfor %}
+    </select>
+    </div>
+</form>
 {% endblock %}
