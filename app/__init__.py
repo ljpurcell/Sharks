@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, flash, request, redirect, render_template, session, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 
 def create_app(test_config=None):
@@ -7,10 +8,10 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     bootstrap = Bootstrap(app)
 
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'sharks.sqlite'),
-    )
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db = SQLAlchemy(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -28,16 +29,25 @@ def create_app(test_config=None):
  
     from . import db, auth
     db.init_app(app)
-    app.register_blueprint(auth.bp)
+    app.register_blueprint(auth.bp) # Not sure if this is doing anything
 
 
     @app.route('/')
     def index():
         return render_template('index.html')
 
-    @app.route('/login')
+    @app.route('/login', methods=['GET', 'POST'])
     def login():
-        return render_template('auth/login.html')
+        if request.method == 'GET':
+            return render_template('auth/login.html')
+        else:
+            if True: # If user successfully logs in
+                # Store user in session['name'] and access via session.get('name')
+                flash('Nice')
+                return redirect(url_for('index'))
+            else:
+                flash('Unrecognised details')
+                return redirect(url_for('register'))
 
     @app.route('/register')
     def register():
