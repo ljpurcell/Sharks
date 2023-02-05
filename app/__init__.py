@@ -1,6 +1,9 @@
-import os
 from flask import Flask, flash, request, redirect, render_template, session, url_for
-from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+# TODO - Make dotenv_path accessible by flask app and not hard coded
+dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
+load_dotenv(dotenv_path=dotenv_path)
 
 
 def create_app(test_config=None):
@@ -8,8 +11,10 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     bootstrap = Bootstrap(app)
 
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    from os import path
+    from flask_sqlalchemy import SQLAlchemy
+    basedir = path.abspath(path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path.join(basedir, 'data.sqlite')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db = SQLAlchemy(app)
 
@@ -17,6 +22,7 @@ def create_app(test_config=None):
         __tablename__ = 'users'
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String, unique=True)
+        password = db.Column(db.String, nullable=False)
         mobile = db.Column(db.String, nullable=False)
         email = db.Column(db.String)
 
@@ -26,23 +32,21 @@ def create_app(test_config=None):
     with app.app_context():
         db.create_all()
 
+    from flask_mail import Mail
+    from os import environ as env
+    app.config['MAIL_SERVER'] = 'smtp.mail.com' 
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USE_TLS'] = True 
+    app.config['MAIL_USERNAME'] = env.get('MAIL_USERNAME') 
+    app.config['MAIL_PASSWORD'] = env.get('MAIL_PASSWORD')
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+    mail = Mail(app)
 
     # ensure the instance folder exists
     try:
-        os.makedirs(app.instance_path)
+        makedirs(app.instance_path)
     except OSError:
         pass
-
-    from . import auth
-    app.register_blueprint(auth.bp) # Not sure if this is doing anything
-
 
     @app.route('/')
     def index():
@@ -61,9 +65,17 @@ def create_app(test_config=None):
                 flash('Unrecognised details')
                 return redirect(url_for('register'))
 
-    @app.route('/register')
+    @app.route('/register', methods=['GET', 'POST'])
     def register():
-        return render_template('auth/register.html')
+        if request.method == 'GET':
+            return render_template('auth/register.html')
+        elif request.method == 'POST':
+            name = form.data['name']
+            password = form.data['password']
+            # TODO
+            # db.session.add(User(name, password))
+            db.session.commit()
+
 
     @app.route('/next-game', methods=['GET'])
     def next_game():
