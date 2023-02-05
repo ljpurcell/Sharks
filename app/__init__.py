@@ -13,6 +13,20 @@ def create_app(test_config=None):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db = SQLAlchemy(app)
 
+    class User(db.Model):
+        __tablename__ = 'users'
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String, unique=True)
+        mobile = db.Column(db.String, nullable=False)
+        email = db.Column(db.String)
+
+        def __repr__(self):
+            return '<User %r>' % self.name
+
+    with app.app_context():
+        db.create_all()
+
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -26,9 +40,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
- 
-    from . import db, auth
-    db.init_app(app)
+    from . import auth
     app.register_blueprint(auth.bp) # Not sure if this is doing anything
 
 
