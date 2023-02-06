@@ -12,9 +12,9 @@ client = Client(env["TWILIO_ACCOUNT_SID"], env["TWILIO_AUTH_TOKEN"])
 from next_and_prev_game import NextGame
 
 if NextGame.is_bye:
-  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + '.\nRemember to get your votes in and keep it joyfully agressive!'
 else:
-  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + "\n" + NextGame.time_str + " at " + NextGame.location
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + "\n" + NextGame.time_str + " at " + NextGame.location  + '.\nRemember to get your votes in and keep it joyfully agressive!'
 
 
 team_members = [
