@@ -16,10 +16,11 @@ for rnd in played:
         PrevGame = rnd
 
 
-# TODO Will need to handle end of season
-NextGame = still_to_play[0] 
-
-for rnd in still_to_play:
-    if rnd.date_time < NextGame.date_time:
-        NextGame = rnd
+if not still_to_play:
+    NextGame = None
+else:
+    NextGame = still_to_play[0] 
+    for rnd in still_to_play:
+        if rnd.date_time < NextGame.date_time:
+            NextGame = rnd
 
