@@ -11,6 +11,21 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     bootstrap = Bootstrap(app)
 
+    from flask_mail import Mail, Message
+    from os import environ as env
+
+    app.config['MAIL_SERVER'] = 'smtp.mail.com' 
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USE_TLS'] = True 
+    app.config['MAIL_USERNAME'] = env.get('MAIL_USERNAME') 
+    app.config['MAIL_PASSWORD'] = env.get('MAIL_PASSWORD')
+
+    mail = Mail(app)
+    msg = Message('test email', sender=env.get("MAIL_USERNAME"), recipients=["lyndonpurcell23@gmail.com"])
+
+    with app.app_context():
+        mail.send(msg)
+
     from os import path
     from flask_sqlalchemy import SQLAlchemy
     basedir = path.abspath(path.dirname(__file__))
@@ -32,21 +47,7 @@ def create_app(test_config=None):
     with app.app_context():
         db.create_all()
 
-    from flask_mail import Mail
-    from os import environ as env
-    app.config['MAIL_SERVER'] = 'smtp.mail.com' 
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USE_TLS'] = True 
-    app.config['MAIL_USERNAME'] = env.get('MAIL_USERNAME') 
-    app.config['MAIL_PASSWORD'] = env.get('MAIL_PASSWORD')
-
-    mail = Mail(app)
-
-    # ensure the instance folder exists
-    try:
-        makedirs(app.instance_path)
-    except OSError:
-        pass
+    
 
     @app.route('/')
     def index():
@@ -65,16 +66,18 @@ def create_app(test_config=None):
                 flash('Unrecognised details')
                 return redirect(url_for('register'))
 
+
     @app.route('/register', methods=['GET', 'POST'])
     def register():
-        if request.method == 'GET':
-            return render_template('auth/register.html')
-        elif request.method == 'POST':
-            name = form.data['name']
-            password = form.data['password']
+        if request.method == 'POST':
             # TODO
+            # name = form.data['name']
+            # password = form.data['password']
             # db.session.add(User(name, password))
             db.session.commit()
+        else:
+            return render_template('auth/register.html')
+        
 
 
     @app.route('/next-game', methods=['GET'])
