@@ -14,9 +14,9 @@ from next_and_prev_game import NextGame
 if NextGame is None:
   message_body = "No more games. Try suspend Twilio and erase cronjob running script. Prepare code for next season"
 elif NextGame.is_bye:
-  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + '.\nRemember to get your votes in and keep it joyfully agressive!'
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n\n" + NextGame.teams
 else:
-  message_body = NextGame.round + " - " + NextGame.date_str + "\n" + NextGame.teams + "\n" + NextGame.time_str + " at " + NextGame.location  + '.\nRemember to get your votes in and keep it joyfully agressive!'
+  message_body = NextGame.round + " - " + NextGame.date_str + "\n\n" + NextGame.teams + "\n\n" + NextGame.time_str + " at " + NextGame.location
 
 
 team_members = [
