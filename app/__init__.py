@@ -10,7 +10,6 @@ from config import config
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
 
-
 bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
@@ -21,6 +20,9 @@ def create_app(config_type):
 
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
+
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
 
     bootstrap.init_app(app)
     mail.init_app(mail)
@@ -41,55 +43,5 @@ def create_app(config_type):
     with app.app_context():
         db.create_all()
 
-    
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
-        if request.method == 'GET':
-            return render_template('auth/login.html')
-        else:
-            if True: # If user successfully logs in
-                # Store user in session['name'] and access via session.get('name')
-                flash('Nice')
-                return redirect(url_for('index'))
-            else:
-                flash('Unrecognised details')
-                return redirect(url_for('register'))
-
-
-    @app.route('/register', methods=['GET', 'POST'])
-    def register():
-        if request.method == 'POST':
-            # TODO
-            # name = form.data['name']
-            # password = form.data['password']
-            # db.session.add(User(name, password))
-            db.session.commit()
-        else:
-            return render_template('auth/register.html')
-        
-
-
-    @app.route('/next-game', methods=['GET'])
-    def next_game():
-        from .next_and_prev_game import NextGame
-        return render_template('next.html', next_game=NextGame)
-
-    @app.route('/votes')
-    def votes():
-        from .next_and_prev_game import PrevGame
-        team = ["Lyndon Purcell", "Michael Walter", "Ian Johnson"] # Create get_team()
-        return render_template('votes.html', prev_game=PrevGame, team=team, total_votes=0)
-
-    @app.errorhandler(404) 
-    def page_not_found(e):
-        return render_template('errors/404.html'), 404
-
-    @app.errorhandler(500)
-    def internal_server_error(e):
-        return render_template('errors/500.html'), 500
 
     return app
