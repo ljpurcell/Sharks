@@ -1,37 +1,31 @@
 from flask import Flask, flash, request, redirect, render_template, session, url_for
+from flask_bootstrap import Bootstrap
+from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+from os import path, environ as env
 from dotenv import load_dotenv
+from config import config
 
 # TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
 
 
-def create_app(test_config=None):
-    from flask_bootstrap import Bootstrap
-    app = Flask(__name__, instance_relative_config=True)
-    bootstrap = Bootstrap(app)
+bootstrap = Bootstrap()
+mail = Mail()
+db = SQLAlchemy()
 
-    from flask_mail import Mail, Message
-    from os import environ as env
 
-    app.config['MAIL_SERVER'] = 'smtp.googlemail.com' 
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True 
-    app.config['MAIL_USERNAME'] = env.get('GMAIL_USERNAME') 
-    app.config['MAIL_PASSWORD'] = env.get('GMAIL_APP_PASSWORD')
+def create_app(config_type):
+    app = Flask(__name__)
 
-    mail = Mail(app)
-    msg = Message('test email', sender=env.get("MAIL_USERNAME"), recipients=["lyndonpurcell23@gmail.com"])
+    app.config.from_object(config[config_type])
+    config[config_type].init_app(app)
 
-    with app.app_context():
-        mail.send(msg)
-
-    from os import path
-    from flask_sqlalchemy import SQLAlchemy
-    basedir = path.abspath(path.dirname(__file__))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path.join(basedir, 'data.sqlite')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db = SQLAlchemy(app)
+    bootstrap.init_app(app)
+    mail.init_app(mail)
+    db.init_app(app)
+        
 
     class User(db.Model):
         __tablename__ = 'users'
@@ -48,7 +42,6 @@ def create_app(test_config=None):
         db.create_all()
 
     
-
     @app.route('/')
     def index():
         return render_template('index.html')
