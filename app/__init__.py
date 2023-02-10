@@ -15,7 +15,7 @@ mail = Mail()
 db = SQLAlchemy()
 
 
-def create_app(config_type):
+def create_app(config_type="development"):
     app = Flask(__name__)
 
     app.config.from_object(config[config_type])
@@ -25,7 +25,7 @@ def create_app(config_type):
     app.register_blueprint(main_blueprint)
 
     bootstrap.init_app(app)
-    mail.init_app(mail)
+    mail.init_app(app)
     db.init_app(app)
         
 
@@ -33,7 +33,7 @@ def create_app(config_type):
         __tablename__ = 'users'
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String, unique=True)
-        password = db.Column(db.String, nullable=False)
+        password_hash = db.Column(db.String, nullable=False)
         mobile = db.Column(db.String, nullable=False)
         email = db.Column(db.String)
 
