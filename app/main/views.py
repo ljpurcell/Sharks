@@ -10,15 +10,15 @@ def index():
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template(url_for('main.auth/login'))
+        return render_template('auth/login.html')
     else:
         if True: # If user successfully logs in
             # Store user in session['name'] and access via session.get('name')
             flash('Nice')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('index.html'))
         else:
             flash('Unrecognised details')
-            return redirect(url_for('main.register'))
+            return redirect(url_for('auth/register.html'))
 
 
 @main.route('/register', methods=['GET', 'POST'])
@@ -30,18 +30,18 @@ def register():
     #     db.session.add(User(name, password))
     #     db.session.commit()
     # else:
-    return render_template(url_for('main.auth/register'))
+    return render_template('auth/register.html')
     
 
 
 @main.route('/next-game', methods=['GET'])
 def next_game():
-    from next_and_prev_game import NextGame
-    return render_template(url_for('main.next'), next_game=NextGame)
+    from ..next_and_prev_game import NextGame
+    return render_template('next.html', next_game=NextGame)
 
 @main.route('/votes')
 def votes():
-    from next_and_prev_game import PrevGame
+    from ..next_and_prev_game import PrevGame
     team = ["Lyndon Purcell", "Michael Walter", "Ian Johnson"] # Create get_team()
-    return render_template(url_for('main.votes'), prev_game=PrevGame, team=team, total_votes=0)
+    return render_template('votes.html', prev_game=PrevGame, team=team, total_votes=0)
 
