@@ -1,9 +1,8 @@
-from flask import Flask, flash, request, redirect, render_template, session, url_for
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from os import path, environ as env
 from dotenv import load_dotenv
 from config import config
 
