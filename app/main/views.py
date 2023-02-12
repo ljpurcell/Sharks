@@ -1,5 +1,5 @@
 from flask import render_template, flash, url_for, redirect, request
-from . import main 
+from . import main, RegistrationForm, LoginForm
 
 
 @main.route('/')
@@ -9,8 +9,9 @@ def index():
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm
     if request.method == 'GET':
-        return render_template('auth/login.html')
+        return render_template('auth/login.html', form=form)
     else:
         if True: # If user successfully logs in
             # Store user in session['name'] and access via session.get('name')
@@ -23,6 +24,7 @@ def login():
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
+    form = RegistrationForm
     # if request.method == 'POST':
     #     TODO
     #     name = form.data['name']
@@ -30,7 +32,7 @@ def register():
     #     db.session.add(User(name, password))
     #     db.session.commit()
     # else:
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', form=form)
     
 
 
