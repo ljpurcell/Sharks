@@ -9,7 +9,7 @@ load_dotenv(dotenv_path=dotenv_path)
 
 client = Client(env["TWILIO_ACCOUNT_SID"], env["TWILIO_AUTH_TOKEN"])
 
-from .next_and_prev_game import NextGame
+from schedule.next_and_prev_game import NextGame
 
 if NextGame is None:
   message_body = "No more games. Try suspend Twilio and erase cronjob running script. Prepare code for next season"

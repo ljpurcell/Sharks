@@ -1,4 +1,4 @@
-from .scraper import Season
+from scraper import Season
 
 played = []
 still_to_play = []

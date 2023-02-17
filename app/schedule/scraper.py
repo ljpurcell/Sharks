@@ -1,9 +1,6 @@
 URL = "https://www.playhq.com/basketball-victoria/org/sharks-basketball-club-geelong/b78f41ba/gub-community-competitions-summer-202223/teams/bull-sharks-div2-men/4b014ac5"
 
 def scrape_site(url):
-    """
-    REF: https://stackoverflow.com/questions/38489386/python-requests-403-forbidden
-    """
     import requests
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     return requests.get(url, headers=headers)
@@ -17,7 +14,7 @@ soup = BeautifulSoup(page.content, "html.parser")
 rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 
 def create_season(rounds):
-    from app.game import Game
+    from game import Game
 
     def get_date_time(round):
         from datetime import datetime
