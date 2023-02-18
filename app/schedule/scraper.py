@@ -14,7 +14,7 @@ soup = BeautifulSoup(page.content, "html.parser")
 rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 
 def create_season(rounds):
-    from game import Game
+    from app.schedule.game import Game
 
     def get_date_time(round):
         from datetime import datetime

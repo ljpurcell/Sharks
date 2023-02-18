@@ -2,9 +2,11 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
+from celery import Celery
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from config import config
+
 
 
 
@@ -15,6 +17,7 @@ load_dotenv(dotenv_path=dotenv_path)
 bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
+celery = Celery(__name__, 'amqp://localhost')
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
@@ -35,8 +38,6 @@ def create_app(config_type="development"):
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    
-
 
     with app.app_context():
         db.create_all()

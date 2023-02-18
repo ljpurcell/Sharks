@@ -3,31 +3,50 @@
 <div class="navbar navbar-inverse" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href={{ url_for('main.index') }}>BullSharks</a>
+      <a class="navbar-brand" href={{ url_for('main.index') }}> BullSharks</a>
     </div>
-    
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a href={{ url_for('main.votes') }}>Votes</a></li>
         <li><a href={{ url_for('main.next_game') }}>Next game</a></li>
       </ul>
-      <div>
-        <a href={{ url_for('auth.login') }}>Login</a>
-      </div>
+      {% if user and user.is_authenticated %}
       <div>
         <a href={{ url_for('auth.logout') }}>Logout</a>
       </div>
+      {% else %}
+      <div>
+        <a href={{ url_for('auth.login') }}>Login</a>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
-{% endblock %} {% block content %}
-<div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
+{% endblock %}  
+
+    {% block alert %}
+{% with messages = get_flashed_messages(with_categories=true) %} 
+  {% if messages %} 
+    {% for category, message in messages %} 
+      {% if category == 'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
       {{ message }}
-</div>
-{% endfor %}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %} {%endblock%}
+  
+    {% block content %}
+<div class="container">
 
   {% block page_content %}{% endblock %}</div>
-{% endblock %}
+
+  {% endblock %}
