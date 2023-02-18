@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %} Login {% endblock %}</h1>
-{% endblock %} {% block content %}
+{% endblock %} {% block page_content %}
 <form method="POST">
   {{ form.csrf_token }} {{ form.username }} {{ form.password }} {{ form.submit
   }}

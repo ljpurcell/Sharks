@@ -1,3 +1,10 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path=dotenv_path)
+
 from os import path, environ as env
 basedir = path.abspath(path.dirname(__file__))
 

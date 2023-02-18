@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %} Register {% endblock %}</h1>
-{% endblock %} {% block content %}
+{% endblock %} {% block page_content %}
 <form method="POST">
   {{ form.csrf_token }} {{ form.username }} {{ form.password }} {{ form.email }}
   {{ form.mobile }} {{ form.submit }}
