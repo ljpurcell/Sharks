@@ -39,10 +39,13 @@ def register():
             mobile=form.mobile.data,
             email=form.email.data
             )
-        db.session.add(new_user).commit()
+        db.session.add(new_user)
+        db.session.commit()
         login_user(new_user, remember=True)
         flash('You are logged in!', category='success')
-        # Send async email notifying of registration
+        from app.notifications.new_user_email import create_welcome_email, send_email
+        # Makes async with celery
+        send_email(create_welcome_email(user=current_user))
         return redirect(url_for('main.index', user=current_user))
 
     return render_template('auth/register.html', form=form)
