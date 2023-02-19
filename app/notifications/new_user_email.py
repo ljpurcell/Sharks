@@ -1,3 +1,6 @@
+from celery import Celery
+
+celery = Celery('new_user_email', broker='amqp://localhost:5000')
 
 def create_email(receiver_email, subject, body):
     from os import environ as env
@@ -20,3 +23,9 @@ def send_email(email_msg):
         return True
     else:
         return False
+    
+@celery.task
+def send_welcome_email(user):
+    from os import system
+    system.run('echo we got here')
+    return send_email(create_welcome_email(user))
