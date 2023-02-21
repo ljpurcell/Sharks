@@ -1,8 +1,11 @@
-from os import environ as env
-from os.path import join
 from twilio.rest import Client
 from dotenv import load_dotenv
-from schedule.next_and_prev_game import PrevGame
+from os.path import join
+from os import sys, environ as env
+
+sys.path.append('/Users/LJPurcell/Code/Sharks/app/schedule')
+
+from next_and_prev_game import PrevGame
 
 # TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = join('/Users/LJPurcell/Code/Sharks/.env')

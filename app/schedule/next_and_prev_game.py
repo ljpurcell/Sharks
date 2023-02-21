@@ -1,4 +1,9 @@
-from app.schedule.scraper import Season
+import sys
+ 
+
+sys.path.append('/Users/LJPurcell/Code/Sharks/app')
+
+from schedule.scraper import Season
 
 played = []
 still_to_play = []

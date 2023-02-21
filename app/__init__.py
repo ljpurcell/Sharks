@@ -8,7 +8,6 @@ from config import config
 
 
 
-
 # TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
