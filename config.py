@@ -17,6 +17,7 @@ class Config:
     MAIL_PASSWORD = env.get('GMAIL_APP_PASSWORD')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_SECRET_KEY = env.get('SECRET_KEY')
+    
 
     @staticmethod
     def init_app(app):
@@ -27,7 +28,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = env.get('DEV_DATABASE_URL', 'sqlite:///' + path.join(basedir, 'data-dev.sqlite'))
-
+    CELERY_BROKER_URL = env.get('CELERY_BROKER_URL')
 
 class TestingConfig(Config):
     TESTING = True

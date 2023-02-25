@@ -3,15 +3,11 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import generate_password_hash, check_password_hash
 import asyncio
 from . import auth
-from .. import db, login_manager
+from .. import db
 from ..auth.models.form import RegistrationForm, LoginForm
 from ..auth.models.user import User
 from app.notifications.new_user_email import send_welcome_email
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -37,7 +33,7 @@ def register():
         user = User.create_new_user(database=db, data=form)
         login_user(user, remember=True)
         flash('You are logged in!', category='success')
-        send_welcome_email(user)
+        send_welcome_email.delay(user)
         return redirect(url_for('main.index', user=user))
 
     return render_template('auth/register.html', form=form)

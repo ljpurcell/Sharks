@@ -3,7 +3,9 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from celery import Celery
 from dotenv import load_dotenv
+from os import environ as env
 from config import config
 
 
@@ -17,10 +19,12 @@ mail = Mail()
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+celery = Celery(__name__, broker=env.get('CELERY_BROKER_URL'))
 
 
 def create_app(config_type="development"):
     app = Flask(__name__)
+    
 
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
