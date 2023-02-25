@@ -1,10 +1,12 @@
 from flask import redirect, render_template, url_for, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import generate_password_hash, check_password_hash
+import asyncio
 from . import auth
 from .. import db, login_manager
-from ..main.models.form import RegistrationForm, LoginForm
-from ..main.models.user import User
+from ..auth.models.form import RegistrationForm, LoginForm
+from ..auth.models.user import User
+from app.notifications.new_user_email import send_welcome_email
 
 
 @login_manager.user_loader
@@ -29,23 +31,15 @@ def login():
 
 
 @auth.route('/register', methods=['GET', 'POST'])
-def register():
+async def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
-        new_user = User(
-            username=form.username.data, 
-            password_hash=hashed_password, 
-            mobile=form.mobile.data,
-            email=form.email.data
-            )
-        db.session.add(new_user)
-        db.session.commit()
+        # TODO make async
+        new_user = User.create_new_user(database=db, data=form)
         login_user(new_user, remember=True)
         flash('You are logged in!', category='success')
-        from app.notifications.new_user_email import send_welcome_email
-        # Makes async with celery
-        send_welcome_email(current_user).delay()
+        # TODO make async 
+        send_welcome_email(current_user)
         return redirect(url_for('main.index', user=current_user))
 
     return render_template('auth/register.html', form=form)

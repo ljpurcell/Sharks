@@ -1,6 +1,5 @@
-from celery import Celery
+import asyncio
 
-celery = Celery('new_user_email', broker='amqp://localhost:5000')
 
 def create_email(receiver_email, subject, body):
     from os import environ as env
@@ -16,16 +15,15 @@ def create_welcome_email(user):
     return create_email(receiver_email=user.email, subject=subject, body=body)
     
 
-def send_email(email_msg):
+async def send_email(email_msg):
     from app import mail
-    result = mail.send(email_msg)
+    send_mail_task = asyncio.create_task(mail.send(email_msg))
+    result = await send_mail_task
     if result == 0:
         return True
     else:
         return False
     
-@celery.task
+
 def send_welcome_email(user):
-    from os import system
-    system.run('echo we got here')
     return send_email(create_welcome_email(user))
