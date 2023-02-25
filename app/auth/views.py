@@ -31,16 +31,14 @@ def login():
 
 
 @auth.route('/register', methods=['GET', 'POST'])
-async def register():
+def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        # TODO make async
-        new_user = User.create_new_user(database=db, data=form)
-        login_user(new_user, remember=True)
+        user = User.create_new_user(database=db, data=form)
+        login_user(user, remember=True)
         flash('You are logged in!', category='success')
-        # TODO make async 
-        send_welcome_email(current_user)
-        return redirect(url_for('main.index', user=current_user))
+        send_welcome_email(user)
+        return redirect(url_for('main.index', user=user))
 
     return render_template('auth/register.html', form=form)
     

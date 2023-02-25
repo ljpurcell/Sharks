@@ -1,10 +1,10 @@
+from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from .user import User
 
 class RegistrationForm(FlaskForm):
-    # Look into validation options for each
     username = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
     email = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})
@@ -17,6 +17,7 @@ class RegistrationForm(FlaskForm):
         ).first()
 
         if existing_username:
+            flash("That username is already taken, sorry.")
             raise ValidationError("That username is already taken, sorry.")
 
 
