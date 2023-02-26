@@ -1,6 +1,7 @@
 from app import db
-from flask_login import UserMixin
+from flask_login import UserMixin, login_manager
 from flask_bcrypt import generate_password_hash
+
 
 
 class User(db.Model, UserMixin):

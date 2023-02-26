@@ -1,8 +1,7 @@
-import asyncio
 from app import mail, celery
 from os import environ as env
 from flask_mail import Message
-from app.auth import load_user
+from ..auth.models.user import User
 
 
 def create_email(receiver_email, subject, body):
@@ -23,5 +22,5 @@ def send_email(email_msg):
 
 @celery.task
 def send_welcome_email(user_id):
-    user = load_user(user_id)
+    user = User.query.get(int(user_id))
     send_email(create_welcome_email(user))

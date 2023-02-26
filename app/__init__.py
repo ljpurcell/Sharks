@@ -10,6 +10,7 @@ from config import config
 
 
 
+
 # TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
@@ -17,12 +18,12 @@ load_dotenv(dotenv_path=dotenv_path)
 bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
+celery = Celery(__name__, broker=env.get('CELERY_BROKER_URL'))
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
-celery = Celery(__name__, broker=env.get('CELERY_BROKER_URL'))
 
 
-def create_app(config_type="development"):
+def create_app(config_type):
     app = Flask(__name__)
     
 
