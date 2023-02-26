@@ -3,15 +3,11 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from celery import Celery
+from celery import Celery, Task
 from dotenv import load_dotenv
 from os import environ as env
 from config import config
-from . import celeryconfig
-
-
-
-
+from .celery. celeryconfig import celery_config
 
 # TODO - Make dotenv_path accessible by flask app and not hard coded
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
@@ -30,7 +26,30 @@ def create_app(config_type="development"):
 
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
-    celery.config_from_object(celeryconfig)
+    
+    def celery_init_app(app: Flask) -> Celery:
+        class FlaskTask(Task):
+            def __call__(self, *args: object, **kwargs: object) -> object:
+                with app.app_context():
+                    return self.run(*args, **kwargs)
+
+        celery_app = Celery(app.name, task_cls=FlaskTask)
+        celery_app.config_from_object(app.config["CELERY"])
+        celery_app.set_default()
+        app.extensions["celery"] = celery_app
+        return celery_app
+
+
+    app.config.from_mapping(
+        CELERY=celery_config,
+    )
+    app.config.from_prefixed_env()
+    celery_init_app(app)
+    
+
+    import json
+    print(json.dumps(app.config, indent=2, default=str))
+    print(json.dumps(celery.conf, indent=2, default=str))
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
@@ -49,3 +68,6 @@ def create_app(config_type="development"):
     
 
     return app
+
+
+

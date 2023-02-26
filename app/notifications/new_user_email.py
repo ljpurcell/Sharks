@@ -1,6 +1,7 @@
 from app import mail, celery
 from os import environ as env
 from flask_mail import Message
+from celery import shared_task
 from ..auth.models.user import User
 
 
@@ -20,7 +21,7 @@ def send_email(email_msg):
     mail.send(email_msg)
     
 
-@celery.task(queue='celery', name='send_welcome_email')
+@shared_task(queue='celery', name='send_welcome_email')
 def send_welcome_email(user_id):
     user = User.query.get(int(user_id))
     send_email(create_welcome_email(user))
