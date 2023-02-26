@@ -16,7 +16,6 @@ load_dotenv(dotenv_path=dotenv_path)
 bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
-celery = Celery(__name__, broker=env.get('CELERY_BROKER_URL'))
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
@@ -33,7 +32,7 @@ def create_app(config_type="development"):
                 with app.app_context():
                     return self.run(*args, **kwargs)
 
-        celery_app = Celery(app.name, task_cls=FlaskTask)
+        celery_app = Celery(__name__, task_cls=FlaskTask)
         celery_app.config_from_object(app.config["CELERY"])
         celery_app.set_default()
         app.extensions["celery"] = celery_app
@@ -48,8 +47,7 @@ def create_app(config_type="development"):
     
 
     import json
-    print(json.dumps(app.config, indent=2, default=str))
-    print(json.dumps(celery.conf, indent=2, default=str))
+    print(json.dumps(app.extensions['celery'].conf, indent=2, default=str), '\n')
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
