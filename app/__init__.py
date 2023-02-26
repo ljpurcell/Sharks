@@ -7,6 +7,8 @@ from celery import Celery
 from dotenv import load_dotenv
 from os import environ as env
 from config import config
+from . import celeryconfig
+
 
 
 
@@ -23,12 +25,12 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
 
-def create_app(config_type):
+def create_app(config_type="development"):
     app = Flask(__name__)
-    
 
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
+    celery.config_from_object(celeryconfig)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
