@@ -1,7 +1,6 @@
 from app import mail, celery
 from os import environ as env
 from flask_mail import Message
-from celery import shared_task
 from ..auth.models.user import User
 
 
@@ -15,13 +14,16 @@ def create_welcome_email(user):
     subject = 'Welcome!'
     body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link below: LINK'
     return create_email(receiver_email=user.email, subject=subject, body=body)
+
     
 
-def send_email(email_msg):
-    mail.send(email_msg)
-    
-
-@shared_task(queue='celery', name='send_welcome_email')
 def send_welcome_email(user_id):
+    send_async_welcome_email.delay(user_id)
+
+
+@celery.task
+def send_async_welcome_email(user_id):
     user = User.query.get(int(user_id))
-    send_email(create_welcome_email(user))
+    email_msg = create_welcome_email(user)
+    print(celery.conf)
+    mail.send(email_msg)

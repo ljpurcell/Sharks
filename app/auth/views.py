@@ -35,7 +35,7 @@ def register():
         user = User.create_new_user(database=db, data=form)
         login_user(user, remember=True)
         flash('You are logged in!', category='success')
-        send_welcome_email.delay(user.id)
+        send_welcome_email(user.id)
         return redirect(url_for('main.index', user=user))
 
     return render_template('auth/register.html', form=form)

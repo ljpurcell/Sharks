@@ -28,7 +28,7 @@ class DevelopmentConfig(Config):
     ENV="development"
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = env.get('DEV_DATABASE_URL', 'sqlite:///' + path.join(basedir, 'data-dev.sqlite'))
-    CELERY_BROKER_URL = env.get('CELERY_BROKER_URL')
+    
 
 class TestingConfig(Config):
     ENV="testing"
