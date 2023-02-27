@@ -33,7 +33,9 @@ def create_app(config_type="development"):
     app.register_blueprint(auth_blueprint)
 
     celery.conf.update(app.config)
-    celery.autodiscover_tasks(['app', 'app.tasks'])
+    celery.conf.update(
+        include=['app']
+    )
 
 
     import json
