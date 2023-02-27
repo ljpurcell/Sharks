@@ -5,7 +5,7 @@ from . import auth
 from .. import db, login_manager
 from ..auth.models.form import RegistrationForm, LoginForm
 from ..auth.models.user import User
-from app.notifications.new_user_email import send_welcome_email
+from app.tasks import send_welcome_email
 
 @login_manager.user_loader
 def load_user(user_id):
