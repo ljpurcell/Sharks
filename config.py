@@ -8,7 +8,9 @@ from os import path, environ as env
 basedir = path.abspath(path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = env.get('SECRET_KEY')
+    APP_URL = env.get('APP_URL') or 'http://localhost:5000/'
+    SECRET_KEY = env.get('SECRET_KEY') or 'secret'
+    SECURITY_SALT = env.get('SECURITY_SALT') or 'salt'
     MAIL_SERVER = env.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(env.get('MAIL_PORT', 587))
     MAIL_USE_TLS = env.get('MAIL_USE_TLS', True)
@@ -16,6 +18,7 @@ class Config:
     MAIL_PASSWORD = env.get('GMAIL_APP_PASSWORD')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_SECRET_KEY = env.get('SECRET_KEY')
+    REDIS_URL = env.get('REDIS_URL') or 'redis://'
     
 
     @staticmethod

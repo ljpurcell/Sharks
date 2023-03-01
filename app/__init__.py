@@ -3,7 +3,8 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from celery import Celery
+from redis import Redis
+from rq import Queue
 from dotenv import load_dotenv
 from config import config
 
@@ -15,7 +16,7 @@ load_dotenv(dotenv_path=dotenv_path)
 bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
-celery = Celery(__name__, broker= 'redis://localhost:6379/0')
+queue = Queue(connection=Redis())
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
@@ -32,19 +33,13 @@ def create_app(config_type="development"):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
-    celery.conf.update(app.config)
-    celery.conf.update(
-        include=['app']
-    )
-
-
-    import json
-    print(__name__, '\n' + json.dumps(celery.conf, indent=2, default=str), '\n')
-
     bootstrap.init_app(app)
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = Queue('shark-tasks', connection=app.redis)
 
     with app.app_context():
         db.create_all()
