@@ -8,7 +8,7 @@ from os import path, environ as env
 basedir = path.abspath(path.dirname(__file__))
 
 class Config:
-    APP_URL = env.get('APP_URL') or 'http://localhost:5000/'
+    APP_URL = env.get('APP_URL') or 'http://127.0.0.1:5000'
     SECRET_KEY = env.get('SECRET_KEY') or 'secret'
     SECURITY_SALT = env.get('SECURITY_SALT') or 'salt'
     MAIL_SERVER = env.get('MAIL_SERVER', 'smtp.googlemail.com')

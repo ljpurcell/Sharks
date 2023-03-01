@@ -38,7 +38,7 @@ def register():
     if form.validate_on_submit():
         user = User.create_new_user(database=db, data=form)
         login_user(user, remember=True)
-        flash('You are logged in!', category='success')
+        flash('Nice! You will be sent a verification email shortly.', category='success')
         queue.enqueue(send_async_welcome_email, user.id)
         return redirect(url_for('main.index', user=user))
 
@@ -46,6 +46,7 @@ def register():
 
 
 @auth.route('/confirm/<token>')
+@login_required
 def confirm_email(token):
     if current_user.is_confirmed_email:
         flash('Email already confirmed', 'success')
@@ -56,7 +57,7 @@ def confirm_email(token):
     
     if user.email == email:
         user.is_confirmed_email = True
-        user.email_confirmed_on = datetime.now()
+        user.email_confirmed_on = datetime.datetime.now()
         db.session.add(user)
         db.session.commit()
         flash('Email confirmed!', 'success')
@@ -84,7 +85,7 @@ def send_async_welcome_email(user_id):
         user = User.query.get(int(user_id))
         msg = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
         msg.subject = 'Welcome!'
-        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link below: ' + generate_token(user.email)
+        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: {generate_token(user.email)}'
         mail.send(msg)
 
 
