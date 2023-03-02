@@ -1,6 +1,7 @@
 from flask import flash, render_template
 from flask_login import login_required, current_user
 from . import main
+from ..auth.models.user import User
 
 
 @main.route('/')
@@ -18,6 +19,6 @@ def next_game():
 @login_required
 def votes():
     from app.schedule import next_and_prev_game
-    team = ["Lyndon Purcell", "Michael Walter", "Ian Johnson"] # Create get_team()
-    return render_template('votes.html', prev_game=next_and_prev_game.PrevGame, team=team, total_votes=0, user=current_user)
+    team = User.query.all()
+    return render_template('votes.html', prev_game=next_and_prev_game.PrevGame, team=team, user=current_user)
 

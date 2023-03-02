@@ -1,3 +1,10 @@
+<head>
+  <script
+    type="text/javascript"
+    src="{{ url_for('static', filename='js/votes.js') }}"
+  ></script>
+</head>
+
 {% extends "base.html" %} {% block title %} Bullsharks - Votes {% endblock %} {%
 block page_content %}
 <div class="page-header"><h1>Votes for {{ prev_game.round }}</h1></div>
@@ -14,19 +21,76 @@ block page_content %}
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="player">Player</label>
-       <select class="">
-      {% for player in team %}
-      <option>{{ player }}</option>
-      {% endfor %}
-    </select>
+
+      <select id="playerMenu1" class="">
+        {% for player in team %}
+        <option>{{ player.username }}</option>
+        {% endfor %}
+      </select>
     </div>
+
     <div class="form-group col-md-6">
-      <label for="votes">Votes</label>
-      <select class="">
-      {% for i in range(1, 4 - total_votes) %}
-      <option>{{ i }}</option>
-      {% endfor %}
-    </select>
+      <label for="votes"> Votes </label>
+      <select id="votesMenu1" class="">
+        <option selected disabled hidden>Votes</option>
+        {% for i in range(1, 4) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
     </div>
+  </div>
+
+  <hr />
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="player">Player</label>
+
+      <select id="playerMenu2" class="">
+        {% for player in team %}
+        <option>{{ player.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="votes"> Votes </label>
+      <select id="votesMenu2" class="">
+        <option selected disabled hidden>Votes</option>
+        {% for i in range(1, 4) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="player">Player</label>
+
+      <select id="playerMenu3" class="">
+        {% for player in team %}
+        <option>{{ player.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="votes"> Votes </label>
+      <select id="votesMenu3" class="">
+        <option selected disabled hidden>Votes</option>
+        {% for i in range(1, 4) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
 </form>
+
+<div>
+  <button class="button" onclick="submitVotes()">Submit votes</button>
+</div>
+
 {% endblock %}
