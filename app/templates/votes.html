@@ -21,8 +21,8 @@ block page_content %}
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="player">Player</label>
-
       <select id="playerMenu1" class="">
+        <option selected disabled hidden>Player</option>
         {% for player in team %}
         <option>{{ player.username }}</option>
         {% endfor %}
@@ -47,6 +47,7 @@ block page_content %}
       <label for="player">Player</label>
 
       <select id="playerMenu2" class="">
+        <option selected disabled hidden>Player</option>
         {% for player in team %}
         <option>{{ player.username }}</option>
         {% endfor %}
@@ -71,6 +72,7 @@ block page_content %}
       <label for="player">Player</label>
 
       <select id="playerMenu3" class="">
+        <option selected disabled hidden>Player</option>
         {% for player in team %}
         <option>{{ player.username }}</option>
         {% endfor %}

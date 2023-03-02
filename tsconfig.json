@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "outDir": "dist",
-    "watch": true
+    "watch": true,
+    "lib": ["DOM", "ESNext"]
   },
   "include": ["./app/**/*"]
 }
