@@ -39,7 +39,7 @@ function submitVotes(): Boolean {
     voteGetter1,
     voteGetter2,
     voteGetter3,
-  ].filter(Boolean);
+  ].filter((player) => Boolean(player) && player !== "Player");
 
   console.log(playersWhoGotVotes);
 
@@ -55,23 +55,23 @@ function submitVotes(): Boolean {
   console.log(votesAssigned);
 
   const voteAssignments: Object = {
-    roundID: "",
-    voteGiverID: "",
+    roundID: "TEST",
+    voteGiverID: "TEST",
     assignedVotes: votesAssigned,
   };
 
-  //   try {
-  //     postVotesToApi(votes);
-  //   } catch (error) {
-  //     console.log(error);
-  //     return false;
-  //   }
+  try {
+    postVotesToApi(voteAssignments);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 
   return true;
 }
 
 function postVotesToApi(votes: Object): void {
-  const votesEndPoint: string = "/submit-votes";
+  const votesEndPoint: string = "/votes";
 
   fetch(votesEndPoint, {
     method: "POST",

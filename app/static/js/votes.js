@@ -18,7 +18,7 @@ function submitVotes() {
         voteGetter1,
         voteGetter2,
         voteGetter3,
-    ].filter(Boolean);
+    ].filter(function (player) { return Boolean(player) && player !== "Player"; });
     console.log(playersWhoGotVotes);
     if (playersWhoGotVotes.length !== givenVotes.length) {
         console.log("Mismatch of players and assigned votes");
@@ -29,20 +29,21 @@ function submitVotes() {
     });
     console.log(votesAssigned);
     var voteAssignments = {
-        roundID: "",
-        voteGiverID: "",
+        roundID: "TEST",
+        voteGiverID: "TEST",
         assignedVotes: votesAssigned
     };
-    //   try {
-    //     postVotesToApi(votes);
-    //   } catch (error) {
-    //     console.log(error);
-    //     return false;
-    //   }
+    try {
+        postVotesToApi(voteAssignments);
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
     return true;
 }
 function postVotesToApi(votes) {
-    var votesEndPoint = "/submit-votes";
+    var votesEndPoint = "/votes";
     fetch(votesEndPoint, {
         method: "POST",
         body: JSON.stringify(votes)

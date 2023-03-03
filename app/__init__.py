@@ -27,12 +27,6 @@ def create_app(config_type="development"):
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
-
     bootstrap.init_app(app)
     mail.init_app(app)
     db.init_app(app)
@@ -42,6 +36,12 @@ def create_app(config_type="development"):
     app.task_queue = Queue('shark-tasks', connection=app.redis)
 
     with app.app_context():
+        from .auth import auth as auth_blueprint
+        from .main import main as main_blueprint
+        from .main.api import api as api_blueprint
+        app.register_blueprint(main_blueprint)
+        app.register_blueprint(auth_blueprint)
+        app.register_blueprint(api_blueprint)
         db.create_all()
 
     return app
