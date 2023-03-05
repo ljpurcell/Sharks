@@ -1,7 +1,8 @@
 from app import db
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash
-
+from itsdangerous import URLSafeTimedSerializer
+from flask import current_app as app
 
 
 class User(db.Model, UserMixin):
@@ -32,3 +33,15 @@ class User(db.Model, UserMixin):
         database.session.add(new_user)
         database.session.commit()
         return new_user 
+    
+    def generate_token(email):
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        return app.config['APP_URL'] + '/confirm/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
+
+    def confirm_token(token, expiration=3600):
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        try:
+            email = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
+            return email
+        except Exception:
+            return False

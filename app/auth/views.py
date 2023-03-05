@@ -76,16 +76,14 @@ def logout():
 
 
 
-def send_async_welcome_email(user_id):
-    from ..auth.token import generate_token
-    
+def send_async_welcome_email(user_id):    
     app = create_app() 
 
     with app.app_context():
         user = User.query.get(int(user_id))
         msg = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
         msg.subject = 'Welcome!'
-        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: {generate_token(user.email)}'
+        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: {url_for(user.generate_token(user.email), _external=True)}'
         mail.send(msg)
 
 
