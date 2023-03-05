@@ -1,17 +1,12 @@
+from flask import current_app as app
 from twilio.rest import Client
-from dotenv import load_dotenv
-from os.path import join
-from os import sys, environ as env
+from os import sys
 
 sys.path.append('/Users/LJPurcell/Code/Sharks/app/schedule')
 
-from next_and_prev_game import PrevGame
+from app.schedule.next_and_prev_game import PrevGame
 
-# TODO - Make dotenv_path accessible by flask app and not hard coded
-dotenv_path = join('/Users/LJPurcell/Code/Sharks/.env')
-load_dotenv(dotenv_path=dotenv_path)
-
-client = Client(env["TWILIO_ACCOUNT_SID"], env["TWILIO_AUTH_TOKEN"])
+client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
 
 team_members = [
   "+61447915198", # Me
@@ -29,6 +24,6 @@ if not PrevGame.is_bye:
     for team_member in team_members:
         message = client.messages.create(
             body=message_body,
-            from_=env["TWILIO_PHONE_NUMBER"],
+            from_=app.config['TWILIO_PHONE_NUMBER'],
             to=team_member
         )
