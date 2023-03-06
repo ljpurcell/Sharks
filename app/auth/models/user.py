@@ -2,7 +2,7 @@ from app import db
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer
-from flask import current_app as app
+from flask import url_for, current_app as app
 
 
 class User(db.Model, UserMixin):
@@ -38,15 +38,15 @@ class User(db.Model, UserMixin):
         database.session.commit()
         return new_user 
     
-    def generate_email_token(email):
+    def generate_email_token(self, email):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return app.config['APP_URL'] + '/confirm-email/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
+        return '/confirm-email/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
     
-    def generate_mobile_token(mobile):
+    def generate_mobile_token(self, mobile):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return app.config['APP_URL'] + '/confirm-mobile/' + serializer.dumps(mobile, salt=app.config['SECURITY_SALT'])
+        return '/confirm-mobile/' + serializer.dumps(mobile, salt=app.config['SECURITY_SALT'])
 
-    def confirm_email_token(token, expiration=3600):
+    def confirm_email_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
             email = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
@@ -54,7 +54,7 @@ class User(db.Model, UserMixin):
         except Exception:
             return False
         
-    def confirm_mobile_token(token, expiration=3600):
+    def confirm_mobile_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
             mobile = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
