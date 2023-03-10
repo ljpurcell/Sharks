@@ -105,7 +105,7 @@ def send_async_welcome_email(user_id):
         user = User.query.get(int(user_id))
         msg = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
         msg.subject = 'Welcome!'
-        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: {url_for(user.generate_email_token(user.email), _external=True)}'
+        msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: ' + user.generate_email_token(user.email)
         mail.send(msg)
 
 
@@ -115,10 +115,11 @@ def send_async_welcome_text(user_id):
     with app.app_context():
         user = User.query.get(int(user_id))
         client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
-        message_body = f'Hi {user.username}!\n\nPlease verify your mobile by clicking this link and following the prompts: {url_for(user.generate_mobile_token(user.mobile), _external=True)}'
+        message_body = f'Hi {user.username}!\n\nPlease verify your mobile by clicking this link and following the prompts: ' + user.generate_mobile_token(user.mobile)
         message = client.messages.create(
                 body=message_body,
                 from_=app.config['TWILIO_PHONE_NUMBER'],
-                to=user.mobile
+                # Hard coded. Need function to transform user mobile into internationally valid
+                to=env.get('MY_NUMBER') 
             )
 

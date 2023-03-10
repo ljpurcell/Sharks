@@ -40,11 +40,11 @@ class User(db.Model, UserMixin):
     
     def generate_email_token(self, email):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return '/confirm-email/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
+        return app.config['APP_URL'] + '/confirm-email/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
     
     def generate_mobile_token(self, mobile):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return '/confirm-mobile/' + serializer.dumps(mobile, salt=app.config['SECURITY_SALT'])
+        return app.config['APP_URL'] + '/confirm-mobile/' + serializer.dumps(mobile, salt=app.config['SECURITY_SALT'])
 
     def confirm_email_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
