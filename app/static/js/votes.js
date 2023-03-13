@@ -8,7 +8,7 @@ function submitVotes() {
         return accumulator + current;
     }, 0);
     if (votesSum !== 3) {
-        console.log("Total votes '".concat(votesSum, "' not equal to 3"));
+        invalidVotes("Total votes '".concat(votesSum, "' not equal to 3"));
         return false;
     }
     var voteGetter1 = (document.getElementById("playerMenu1")).value;
@@ -19,15 +19,13 @@ function submitVotes() {
         voteGetter2,
         voteGetter3,
     ].filter(function (player) { return Boolean(player) && player !== "Player"; });
-    console.log(playersWhoGotVotes);
     if (playersWhoGotVotes.length !== givenVotes.length) {
-        console.log("Mismatch of players and assigned votes");
+        invalidVotes("Mismatch of players and assigned votes");
         return false;
     }
     var votesAssigned = playersWhoGotVotes.map(function (player, i) {
         return { player: player, votes: givenVotes[i] };
     });
-    console.log(votesAssigned);
     var voteAssignments = {
         roundID: "TEST",
         voteGiverID: "TEST",
@@ -47,5 +45,12 @@ function postVotesToApi(votes) {
     fetch(votesEndPoint, {
         method: "POST",
         body: JSON.stringify(votes)
+    });
+}
+function invalidVotes(message) {
+    var votesEndPoint = "/error-votes";
+    fetch(votesEndPoint, {
+        method: "POST",
+        body: JSON.stringify(message)
     });
 }

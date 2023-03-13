@@ -19,7 +19,7 @@ function submitVotes(): Boolean {
   }, 0);
 
   if (votesSum !== 3) {
-    console.log(`Total votes '${votesSum}' not equal to 3`);
+    invalidVotes(`Total votes '${votesSum}' not equal to 3`);
     return false;
   }
 
@@ -41,18 +41,14 @@ function submitVotes(): Boolean {
     voteGetter3,
   ].filter((player) => Boolean(player) && player !== "Player");
 
-  console.log(playersWhoGotVotes);
-
   if (playersWhoGotVotes.length !== givenVotes.length) {
-    console.log("Mismatch of players and assigned votes");
+    invalidVotes("Mismatch of players and assigned votes");
     return false;
   }
 
   const votesAssigned: Object = playersWhoGotVotes.map((player, i) => {
     return { player: player, votes: givenVotes[i] };
   });
-
-  console.log(votesAssigned);
 
   const voteAssignments: Object = {
     roundID: "TEST",
@@ -75,6 +71,22 @@ function postVotesToApi(votes: Object): void {
 
   fetch(votesEndPoint, {
     method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(votes),
+  });
+}
+
+function invalidVotes(message: String): void {
+  const votesEndPoint: string = "/error-votes";
+
+  fetch(votesEndPoint, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    body: JSON.stringify(message),
   });
 }

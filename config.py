@@ -9,7 +9,6 @@ basedir = path.abspath(path.dirname(__file__))
 
 class Config:
     SECRET_KEY = env.get('SECRET_KEY') or 'secret'
-    APPLICATION_ROOT='/'
     SECURITY_SALT = env.get('SECURITY_SALT') or 'salt'
     MAIL_SERVER = env.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(env.get('MAIL_PORT', 587))
@@ -32,7 +31,7 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    APP_URL='http://127.0.0.1:5000'
+    APP_URL='localhost'
     ENV="development"
     DEBUG = True
     SERVER_NAME='127.0.0.1:5000'
