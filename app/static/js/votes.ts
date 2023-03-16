@@ -84,7 +84,7 @@ function invalidVotes(message: String): void {
   const votesEndPoint: string = "/error-votes";
 
   fetch(votesEndPoint, {
-    method: "POST",
+    method: "GET",
     mode: "cors",
     cache: "no-cache",
     body: JSON.stringify(message),

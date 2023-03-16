@@ -8,7 +8,6 @@ from ..auth.models.user import User
 def index():
     return render_template('index.html', user=current_user)
 
-
 @main.route('/next-game', methods=['GET'])
 @login_required
 def next_game():

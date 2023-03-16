@@ -1,8 +1,7 @@
-from flask import flash, request, render_template, get_flashed_messages, redirect
+from flask import flash, request, render_template, url_for, redirect
 from flask_login import current_user, login_required
 from app.schedule import next_and_prev_game
 from app.auth.models.user import User
-import json
 from . import api
 
 
@@ -11,15 +10,12 @@ from . import api
 def post_votes():
     req = request.json
     flash('post votes!', category='success')
-    team = User.query.all()
-    return render_template('votes.html', prev_game=next_and_prev_game.PrevGame, team=team, user=current_user)
+    return redirect(url_for('main.index'))
 
 
-@api.route('/error-votes', methods=['POST'])
+@api.route('/error-votes', methods=['GET'])
 @login_required
 def display_voting_error():
-    flash('Voting error!', category='success')
-    m = get_flashed_messages()
-    print(m)
+    flash('Voting error!', category='error')
     team = User.query.all()
-    return render_template('votes.html', prev_game=next_and_prev_game.PrevGame, team=team, user=current_user)
+    return redirect(url_for('main.votes', prev_game=next_and_prev_game.PrevGame, team=team, user=current_user))
