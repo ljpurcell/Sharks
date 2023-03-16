@@ -2,7 +2,7 @@ from app import db
 from flask_login import UserMixin
 from flask_bcrypt import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer
-from flask import url_for, current_app as app
+from flask import current_app as app
 
 
 class User(db.Model, UserMixin):

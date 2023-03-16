@@ -41,7 +41,7 @@ function submitVotes() {
     return true;
 }
 function postVotesToApi(votes) {
-    var votesEndPoint = "/votes";
+    var votesEndPoint = "/record-votes";
     fetch(votesEndPoint, {
         method: "POST",
         mode: "cors",
@@ -50,14 +50,13 @@ function postVotesToApi(votes) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(votes)
+    }).then(function (response) {
+        alert("Votes posted successfully");
+        if (response.redirected) {
+            window.location = response.url;
+        }
     });
 }
 function invalidVotes(message) {
-    var votesEndPoint = "/error-votes";
-    fetch(votesEndPoint, {
-        method: "GET",
-        mode: "cors",
-        cache: "no-cache",
-        body: JSON.stringify(message)
-    });
+    return alert(message);
 }

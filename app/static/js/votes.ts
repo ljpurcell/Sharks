@@ -67,7 +67,7 @@ function submitVotes(): Boolean {
 }
 
 function postVotesToApi(votes: Object): void {
-  const votesEndPoint: string = "/votes";
+  const votesEndPoint: string = "/record-votes";
 
   fetch(votesEndPoint, {
     method: "POST",
@@ -77,16 +77,14 @@ function postVotesToApi(votes: Object): void {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(votes),
+  }).then((response) => {
+    alert("Votes posted successfully");
+    if (response.redirected) {
+      (window as Window).location = response.url;
+    }
   });
 }
 
 function invalidVotes(message: String): void {
-  const votesEndPoint: string = "/error-votes";
-
-  fetch(votesEndPoint, {
-    method: "GET",
-    mode: "cors",
-    cache: "no-cache",
-    body: JSON.stringify(message),
-  });
+  return alert(message);
 }
