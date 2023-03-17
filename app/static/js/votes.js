@@ -46,23 +46,21 @@ function submitVotes() {
     indicesOfPlayersWithVotes !== indicesOfVotes
   ) {
     invalidVotes("Mismatch of players and assigned votes");
+  } else {
+    let votesAssigned = playersWhoGotVotes.map(function (player, i) {
+      return { player: player, votes: givenVotes[i] };
+    });
+    let voteAssignments = {
+      roundID: "TEST",
+      voteGiverID: "TEST",
+      assignedVotes: votesAssigned,
+    };
+    try {
+      postVotesToApi(voteAssignments);
+    } catch (error) {
+      console.log(error);
+    }
   }
-
-  let votesAssigned = playersWhoGotVotes.map(function (player, i) {
-    return { player: player, votes: givenVotes[i] };
-  });
-  let voteAssignments = {
-    roundID: "TEST",
-    voteGiverID: "TEST",
-    assignedVotes: votesAssigned,
-  };
-  try {
-    postVotesToApi(voteAssignments);
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-  return true;
 }
 function postVotesToApi(votes) {
   fetch("/record-votes", {
