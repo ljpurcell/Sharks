@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.schedule import next_and_prev_game
 from app.auth.models.user import User
 from . import api
+import json
 
 
 @api.route('/record-votes', methods=['POST'])
@@ -10,5 +11,4 @@ from . import api
 def record_votes():
     req = request.json
     print(req)
-    flash('post votes!', category='success')
-    return redirect(url_for('main.index'))
+    return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}

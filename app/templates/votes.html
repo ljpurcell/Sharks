@@ -1,8 +1,14 @@
 {% extends "base.html" %} {% block scripts %}
 <script
   type="text/javascript"
+  src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.all.min.js') }}"
+></script>
+
+<script
+  type="text/javascript"
   src="{{ url_for('static', filename='js/votes.js') }}"
 ></script>
+
 {% endblock scripts %} {% block title %} Bullsharks - Votes {% endblock title %}
 {% block page_content %}
 <div class="page-header"><h1>Votes for {{ prev_game.round }}</h1></div>
