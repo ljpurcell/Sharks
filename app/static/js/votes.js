@@ -1,23 +1,33 @@
 "use strict";
 
 function submitVotes() {
-  let voteGetter1 = document.getElementById("playerMenu1").value;
-  let voteGetter2 = document.getElementById("playerMenu2").value;
-  let voteGetter3 = document.getElementById("playerMenu3").value;
-  let voteGetterOptions = [voteGetter1, voteGetter2, voteGetter3];
+  const voteGetterOptions = [
+    document.getElementById("playerMenu1").value,
+    document.getElementById("playerMenu2").value,
+    document.getElementById("playerMenu3").value,
+  ];
 
-  let votes1 = parseInt(document.getElementById("votesMenu1").value);
-  let votes2 = parseInt(document.getElementById("votesMenu2").value);
-  let votes3 = parseInt(document.getElementById("votesMenu3").value);
-  let voteOptions = [votes1, votes2, votes3];
+  const voteOptions = [
+    parseInt(document.getElementById("votesMenu1").value),
+    parseInt(document.getElementById("votesMenu2").value),
+    parseInt(document.getElementById("votesMenu3").value),
+  ];
 
-  validatedVotes = votesAreValid(voteGetterOptions, voteOptions);
+  const validatedVotes = votesAreValid(voteGetterOptions, voteOptions);
+
+  const indicesOfPlayers = voteGetterOptions.map(function (player) {
+    return Boolean(player) && player !== "Player";
+  });
+
+  console.log(indicesOfPlayers);
 
   if (validatedVotes.value) {
-    let votesAssigned = playersWhoGotVotes.map(function (player, i) {
-      return { player: player, votes: givenVotes[i] };
-    });
-    let voteAssignments = {
+    const votesAssigned = playersWhoGotVotes.map((player, i) => ({
+      player: player,
+      votes: givenVotes[i],
+    }));
+
+    const voteAssignments = {
       roundID: "TEST",
       voteGiverID: "TEST",
       assignedVotes: votesAssigned,
@@ -33,36 +43,18 @@ function submitVotes() {
 }
 
 function votesAreValid(players, votes) {
-  let playersWhoGotVotes = players.filter(function (player) {
-    return Boolean(player) && player !== "Player";
-  });
+  const givenVotes = votes.filter(Boolean);
 
-  let givenVotes = votes.filter(Boolean);
-
-  let votesSum = votes.reduce(function (accumulator, current) {
+  const votesSum = givenVotes.reduce(function (accumulator, current) {
     return accumulator + current;
   }, 0);
-
-  let playerInRow = playersWhoGotVotes.map((player) => {
-    return players.includes(player);
-  });
-
-  let votesInRow = givenVotes.map((vote) => {
-    return votes.includes(vote);
-  });
-
-  console.log(playerInRow);
-  console.log(votesInRow);
 
   if (votesSum !== 3) {
     return {
       value: false,
       message: "Total votes '" + votesSum + "' not equal to 3",
     };
-  } else if (
-    playersWhoGotVotes.length !== givenVotes.length ||
-    playerInRow !== votesInRow
-  ) {
+  } else if (playersWhoGotVotes.length !== givenVotes.length) {
     return {
       value: false,
       message: "Mismatch of players and assigned votes",
@@ -75,8 +67,8 @@ function votesAreValid(players, votes) {
   }
 }
 
-function postVotesToApi(votes) {
-  fetch("/record-votes", {
+async function postVotesToApi(votes) {
+  const response = await fetch("/record-votes", {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
@@ -84,7 +76,10 @@ function postVotesToApi(votes) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(votes),
-  }).then(() => {
+  });
+
+  if (response.ok) {
+    const message = await response.json();
     Swal.fire({
       icon: "success",
       title: "Nice!",
@@ -94,7 +89,10 @@ function postVotesToApi(votes) {
     }).then(() => {
       window.location = "/";
     });
-  });
+  } else {
+    invalidVotes(response.message);
+    throw new Error(response.status);
+  }
 }
 function invalidVotes(message) {
   Swal.fire({
