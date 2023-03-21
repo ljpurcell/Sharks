@@ -1,7 +1,7 @@
 "use strict";
 
 function submitVotes() {
-  const voteGetterOptions = [
+  const playerOptions = [
     document.getElementById("playerMenu1").value,
     document.getElementById("playerMenu2").value,
     document.getElementById("playerMenu3").value,
@@ -13,24 +13,13 @@ function submitVotes() {
     parseInt(document.getElementById("votesMenu3").value),
   ];
 
-  const validatedVotes = votesAreValid(voteGetterOptions, voteOptions);
-
-  const indicesOfPlayers = voteGetterOptions.map(function (player) {
-    return Boolean(player) && player !== "Player";
-  });
-
-  console.log(indicesOfPlayers);
+  const validatedVotes = votesValidator(playerOptions, voteOptions);
 
   if (validatedVotes.value) {
-    const votesAssigned = playersWhoGotVotes.map((player, i) => ({
-      player: player,
-      votes: givenVotes[i],
-    }));
-
     const voteAssignments = {
       roundID: "TEST",
       voteGiverID: "TEST",
-      assignedVotes: votesAssigned,
+      assignedVotes: validatedVotes.votes,
     };
     try {
       postVotesToApi(voteAssignments);
@@ -42,27 +31,60 @@ function submitVotes() {
   }
 }
 
-function votesAreValid(players, votes) {
+function votesValidator(players, votes) {
+  const playersWhoGotVotes = players.filter(
+    (player) => Boolean(player) && player !== "Player"
+  );
+
   const givenVotes = votes.filter(Boolean);
 
-  const votesSum = givenVotes.reduce(function (accumulator, current) {
-    return accumulator + current;
-  }, 0);
+  const votesSum = givenVotes.reduce(
+    (accumulator, current) => accumulator + current
+  );
+
+  const indicesOfPlayers = players.map((player) =>
+    playersWhoGotVotes.includes(player)
+  );
+  const indicesOfVotes = votes.map((vote) => givenVotes.includes(vote));
+
+  /**
+   * Check:
+   * 1. Three votes have been given (votesSum)
+   * 2. The number of players selected is the same as votes have been awarded (playersWhoGotVotes == givenVotes)
+   * 3. There are no rows with only a vote or player assigned (playerInRow == voteInRow)
+   * 4. There are no players listed more than once
+   */
 
   if (votesSum !== 3) {
     return {
       value: false,
       message: "Total votes '" + votesSum + "' not equal to 3",
     };
-  } else if (playersWhoGotVotes.length !== givenVotes.length) {
+  } else if (
+    playersWhoGotVotes.length !== givenVotes.length ||
+    !arraysAreSame(indicesOfPlayers, indicesOfVotes)
+  ) {
     return {
       value: false,
       message: "Mismatch of players and assigned votes",
     };
+  } else if (
+    playersWhoGotVotes.length !== distinctArray(playersWhoGotVotes).length // TODO: Needs implementing
+  ) {
+    return {
+      value: false,
+      message: "You have listed a player more than once",
+    };
   } else {
+    const votesAssigned = playersWhoGotVotes.map((player, i) => ({
+      player: player,
+      votes: givenVotes[i],
+    }));
+
     return {
       value: true,
       message: "Your votes were recorded successfully",
+      votes: votesAssigned,
     };
   }
 }
@@ -100,4 +122,8 @@ function invalidVotes(message) {
     title: "Woops!",
     text: message,
   });
+}
+
+function arraysAreSame(arr1, arr2) {
+  return JSON.stringify(arr1) === JSON.stringify(arr2);
 }
