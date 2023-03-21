@@ -47,6 +47,8 @@ function votesValidator(players, votes) {
   );
   const indicesOfVotes = votes.map((vote) => givenVotes.includes(vote));
 
+  const distinctPlayersWhoGotVotes = new Set(playersWhoGotVotes);
+
   /**
    * Check:
    * 1. Three votes have been given (votesSum)
@@ -68,9 +70,7 @@ function votesValidator(players, votes) {
       value: false,
       message: "Mismatch of players and assigned votes",
     };
-  } else if (
-    playersWhoGotVotes.length !== distinctArray(playersWhoGotVotes).length // TODO: Needs implementing
-  ) {
+  } else if (playersWhoGotVotes.length !== distinctPlayersWhoGotVotes.size) {
     return {
       value: false,
       message: "You have listed a player more than once",
