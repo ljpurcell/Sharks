@@ -11,7 +11,7 @@
 
 {% endblock scripts %} {% block title %} Bullsharks - Votes {% endblock title %}
 {% block page_content %}
-<div class="page-header"><h1>Votes for {{ prev_game.round }}</h1></div>
+<div class=""><h1>Votes for {{ prev_game.round }}</h1></div>
 <h3>Game details:</h3>
 <div>
   <ul>
@@ -22,8 +22,8 @@
 </div>
 
 <form class="" action="" method="post">
-  <div class="form-row">
-    <div class="form-group col-md-6">
+  <div class="">
+    <div class="">
       <label for="player">Player</label>
       <select id="playerMenu1" class="">
         <option selected></option>
@@ -33,7 +33,7 @@
       </select>
     </div>
 
-    <div class="form-group col-md-6">
+    <div class="">
       <label for="votes"> Votes </label>
       <select id="votesMenu1" class="">
         <option selected></option>
@@ -46,8 +46,8 @@
 
   <hr />
 
-  <div class="form-row">
-    <div class="form-group col-md-6">
+  <div class="">
+    <div class="">
       <label for="player">Player</label>
 
       <select id="playerMenu2" class="">
@@ -58,7 +58,7 @@
       </select>
     </div>
 
-    <div class="form-group col-md-6">
+    <div class="">
       <label for="votes"> Votes </label>
       <select id="votesMenu2" class="">
         <option selected></option>
@@ -71,8 +71,8 @@
 
   <hr />
 
-  <div class="form-row">
-    <div class="form-group col-md-6">
+  <div class="">
+    <div class="">
       <label for="player">Player</label>
 
       <select id="playerMenu3" class="">
@@ -83,7 +83,7 @@
       </select>
     </div>
 
-    <div class="form-group col-md-6">
+    <div class="">
       <label for="votes"> Votes </label>
       <select id="votesMenu3" class="">
         <option selected></option>
@@ -96,7 +96,7 @@
 </form>
 
 <div>
-  <button class="button" onclick="submitVotes()">Submit votes</button>
+  <button class="" onclick="submitVotes()">Submit votes</button>
 </div>
 
 {% endblock page_content %}

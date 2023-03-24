@@ -50,11 +50,11 @@ function votesValidator(players, votes) {
   const distinctPlayersWhoGotVotes = new Set(playersWhoGotVotes);
 
   /**
-   * Check:
+   * Vote validation:
    * 1. Three votes have been given (votesSum)
    * 2. The number of players selected is the same as votes have been awarded (playersWhoGotVotes == givenVotes)
    * 3. There are no rows with only a vote or player assigned (playerInRow == voteInRow)
-   * 4. There are no players listed more than once
+   * 4. There are no players listed more than once (playersWhoGotVotes.length == distinctPlayersWhoGotVotes.size)
    */
 
   if (votesSum !== 3) {

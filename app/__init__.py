@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -13,7 +12,6 @@ from config import config
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
 
-bootstrap = Bootstrap()
 mail = Mail()
 db = SQLAlchemy()
 queue = Queue(connection=Redis())
@@ -27,7 +25,6 @@ def create_app(config_type="development"):
     app.config.from_object(config[config_type])
     config[config_type].init_app(app)
 
-    bootstrap.init_app(app)
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
