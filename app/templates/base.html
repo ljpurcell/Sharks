@@ -6,36 +6,53 @@
   {% block scripts %} {% endblock scripts %}
 </head>
 
-{% block title %} SharksApp {% endblock %} {% block navbar %}
 
-<nav class="">
-  <div class="bg-black flex flex-wrap" id="navbarNav">
-    <div class="">
-      <a class="text-white" href={{ url_for('main.index') }}> BullSharks</a>
-    </div>
-    <button class="text-white" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class=""></span>
+
+{% block navbar %}
+
+
+
+<div class="w-full bg-black border-b-2 border-gray-500" id="navbar">
+
+  <div class="flex justify-center text-white font-bold py-4">
+    SharksApp - {% block title %} SharksApp {% endblock %} 
+  </div>
+
+
+  <div class="flex flex-wrap justify-between mx-4">
+
+  
+      <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+          <a class="text-white" href={{ url_for('main.index') }}>Home</a>
+      </button>
+
+    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+      
+          <a class="text-white" href={{ url_for('main.votes') }}>Votes</a>
+
   </button>
-  <div>
-    <ul class="">
-      <li class="text-white">
-        <a class="" href={{ url_for('main.votes') }}>Votes</a>
-      </li>
-      <li class="text-white">
-        <a class="text-white hover:text-black" href={{ url_for('main.next_game') }}>Next game</a>
-      </li>
-      </ul>
-      </div>
-      {% if user and user.is_authenticated %}
-      <button class="text-white"><a class="" href={{ url_for('auth.logout') }}>Logout</a>
-      </button>
-      {% else %}
-      <button class="text-white"><a class="" href={{ url_for('auth.login') }}>Login</a>
-      </button>
-      {% endif %}
-    </div>
 
-</nav>
+    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+          <a class="text-white" href={{ url_for('main.next_game') }}>Next game</a>
+  </button>
+
+  {% if user and user.is_authenticated %}
+  <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+      <a class="text-white" href={{ url_for('auth.loout') }}>Logout</a>
+    </button> 
+
+{% else %}
+    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+      <a class="text-white" href={{ url_for('auth.login') }}>Login</a>
+    </button> 
+{% endif %}
+    <button class="bg-slate-500 m-4 p-4 rounded-md">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+  </div>
+    
+</div>
 
 {% endblock %} {% block content %}
 
@@ -64,3 +81,10 @@
   endblock %}
 </div>
 {% endblock %}
+
+
+
+
+
+
+
