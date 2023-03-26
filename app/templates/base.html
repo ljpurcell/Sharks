@@ -1,6 +1,7 @@
 
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
   {% block scripts %} {% endblock scripts %}
@@ -12,7 +13,10 @@
 
 
 
-<div class="w-full bg-black border-b-2 border-gray-500 sm:text-xl" id="navbar">
+<nav class="w-full bg-black border-b-2 border-gray-500 text-xl md:text-lg" id="navbar">
+  <div class="container flex flex-wrap items-center justify-between mx-auto">
+
+  
 
   <div class="flex justify-center text-white font-bold py-4">
     SharksApp - {% block title %} SharksApp {% endblock %} 
@@ -46,13 +50,10 @@
       <a class="text-white" href={{ url_for('auth.login') }}>Login</a>
     </button> 
 {% endif %}
-    <button class="bg-slate-500 m-4 p-4 rounded-md">
-      <i class="fa-solid fa-bars"></i>
-    </button>
 
   </div>
-    
-</div>
+    </div>
+  </nav>
 
 {% endblock %} {% block content %}
 
