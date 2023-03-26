@@ -12,7 +12,7 @@
 
 
 
-<div class="w-full bg-black border-b-2 border-gray-500" id="navbar">
+<div class="w-full bg-black border-b-2 border-gray-500 sm:text-xl" id="navbar">
 
   <div class="flex justify-center text-white font-bold py-4">
     SharksApp - {% block title %} SharksApp {% endblock %} 
@@ -38,7 +38,7 @@
 
   {% if user and user.is_authenticated %}
   <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-      <a class="text-white" href={{ url_for('auth.loout') }}>Logout</a>
+      <a class="text-white" href={{ url_for('auth.logout') }}>Logout</a>
     </button> 
 
 {% else %}
@@ -61,8 +61,8 @@
   messages %} {% for category, message in messages %} {% if category ==
   'success' %}
 
-  <div class="" role="alert">
-    {{ message }}
+  <div class="max-w-screen-sm bg-green-100 border-2 border-green-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
+    {{message}} 
     <button type="button" class="" data-dismiss="alert">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -70,9 +70,9 @@
 
   {% else %}
 
-  <div class="" role="alert">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert">
+  <div class="max-w-screen-sm bg-yellow-100 border-2 border-yellow-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
+    {{message}}
+    <button type="button" class="" data-dismiss="alert">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

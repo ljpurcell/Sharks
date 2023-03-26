@@ -1,13 +1,23 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %} Login {% endblock %}</h1>
 {% endblock %} {% block page_content %}
-<form method="POST">
-  {{ form.csrf_token }} {{ form.username }} {{ form.password }} {{ form.submit
-  }}
-</form>
-<div class="">
+<div class="flex flex-wrap justify-center">
+  <form method="POST" autocomplete="off" class="space-y-4">
+    {{ form.csrf_token }}
+    <div class=""">
+      {{ form.username(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }}
+    </div>
+    <div class="">
+      {{ form.password(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }}
+    </div>
+    <div>  
+      <button class="flex bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200">{{ form.submit(class_="hover:cursorpointer")}}</button>
+  </div>
+    </form>
+</div>
+<div class="flex justify-center text-sm">
   Or
-  <a href="{{url_for('auth.register')}}">Register</a>
+  <a href="{{url_for('auth.register')}}" class="mx-1 text-gray-500">Register</a>
   if it's your first time here!
 </div>
 {% endblock %}
