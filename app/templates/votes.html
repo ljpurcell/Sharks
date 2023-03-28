@@ -9,8 +9,8 @@
   src="{{ url_for('static', filename='js/votes.js') }}"
 ></script>
 
-{% endblock scripts %} {% block title %} Bullsharks - Votes {% endblock title %}
-{% block page_content %}
+{% endblock scripts %} {% block title %} Votes {% endblock title %} {% block
+page_content %}
 
 <div class="flex justify-center">
   <div>
@@ -100,7 +100,7 @@
 <div>
   <button
     class="flex bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200"
-    onclick="submitVotes()"
+    onclick="submitVotes('{{prev_game.round}}', '{{prev_game.date_str}}')"
   >
     Submit votes
   </button>

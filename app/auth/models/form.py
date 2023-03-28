@@ -4,12 +4,19 @@ from wtforms import StringField, PasswordField, EmailField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from .user import User
 
-class RegistrationForm(FlaskForm):
+
+class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
-    email = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})
-    mobile = StringField(validators=[InputRequired()],render_kw={"placeholder":"Mobile"})
-    submit = SubmitField('Register!')
+    submit = SubmitField('Log in!')
+
+
+class UserDetailsForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(min=4,max=30)])
+    password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)])
+    email = EmailField(validators=[InputRequired()])
+    mobile = StringField(validators=[InputRequired()])
+    submit = SubmitField('Save!')
 
     def validate_username(self, username):
         existing_username = User.query.filter_by(
@@ -19,10 +26,15 @@ class RegistrationForm(FlaskForm):
         if existing_username:
             flash("That username is already taken, sorry.")
             raise ValidationError("That username is already taken, sorry.")
+        
 
 
-class LoginForm(FlaskForm):
-    # Look into validation options for each
+class RegistrationForm(UserDetailsForm):
     username = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
-    submit = SubmitField('Log in!')
+    email = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})
+    mobile = StringField(validators=[InputRequired()],render_kw={"placeholder":"Mobile"})
+    submit = SubmitField('Register!')
+        
+
+

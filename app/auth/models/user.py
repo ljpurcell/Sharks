@@ -1,5 +1,5 @@
 from app import db
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from flask_bcrypt import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app as app
@@ -37,6 +37,18 @@ class User(db.Model, UserMixin):
         database.session.add(new_user)
         database.session.commit()
         return new_user 
+    
+    @staticmethod
+    def update_details(database, data):
+        hashed_password = generate_password_hash(data.password.data)
+        user_to_update = User.query.filter_by(id=current_user.id).first()
+        user_to_update.username=data.username.data
+        user_to_update.password_hash=hashed_password
+        user_to_update.email=data.email.data
+        user_to_update.mobile=data.mobile.data
+        database.session.commit()
+        return user_to_update 
+
     
     def generate_email_token(self, email):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])

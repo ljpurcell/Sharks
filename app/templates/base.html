@@ -14,7 +14,7 @@
 
 
 
-<nav class="w-full bg-black border-b-2 border-gray-500 text-xl md:text-lg" id="navbar">
+<nav class="w-full bg-black border-b-2 border-gray-500 text-lg" id="navbar">
   <div class="container md:flex md:flex-wrap md:items-center md:justify-between md:mx-auto">
 
   
@@ -27,33 +27,41 @@
   <div class="flex flex-wrap justify-between mx-4">
 
   <a class="text-white" href={{ url_for('main.index') }}>
-      <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+      <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
           Home
       </button>
       </a>
 
       <a class="text-white" href={{ url_for('main.votes') }}>
-    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+    <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
           Votes
   </button>
   </a>
 
   <a class="text-white" href={{ url_for('main.next_game') }}>
-    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+    <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
           Next game
   </button>
   </a>
 
+
   {% if user and user.is_authenticated %}
+ <a class="text-white" href={{ url_for('auth.my_profile') }}>
+    <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
+          My Profile
+  </button>
+  </a>
+
+
   <a class="text-white" href={{ url_for('auth.logout') }}>
-  <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+  <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
       Logout
     </button> 
     </a>
 
 {% else %}
 <a class="text-white" href={{ url_for('auth.login') }}>
-    <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
+    <button class="hover:bg-slate-500 p-4 my-2 rounded-md">
       Login
     </button> 
     </a>

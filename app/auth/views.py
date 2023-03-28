@@ -3,7 +3,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import check_password_hash
 from flask_mail import Message
 from app import db, login_manager, queue, mail, create_app
-from ..auth.models.form import RegistrationForm, LoginForm
+from ..auth.models.form import LoginForm, UserDetailsForm,RegistrationForm
 from ..auth.models.user import User
 from . import auth
 from os import environ as env
@@ -43,6 +43,18 @@ def register():
         return redirect(url_for('main.index', user=user))
 
     return render_template('auth/register.html', form=form)
+
+
+@auth.route('/my-profile', methods=['GET', 'POST'])
+@login_required
+def my_profile():
+    form = UserDetailsForm()
+    if form.validate_on_submit():
+        user = User.update_details(database=db, data=form)
+        login_user(user, remember=True)
+        flash('Nice! You succesfully updated your details.', category='success')
+
+    return render_template('auth/user.html', user=current_user, form=form)
 
 
 @auth.route('/confirm-email/<token>')

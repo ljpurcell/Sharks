@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{% block header %}
+{% block title %} My Profile {% endblock %}
+{% endblock %}
+{% block page_content %}
+<h1 class="flex justify-center text-3xl font-bold my-4">My Profile</h1>
+<div class="flex flex-wrap justify-center">
+  <form method="POST" autocomplete="off" class="space-y-4">
+  {{ form.csrf_token }} 
+    <div>
+    {{ form.username(class_="p-4 text-lg border-2 bg-gray-100 border-gray-200 flex rounded focus:outline-none", value=user.username, placeholder=user.username) }} 
+    </div>
+    <div class="">
+    {{ form.password(class_="p-4 text-lg border-2 bg-gray-100 border-gray-200 flex rounded focus:outline-none", placeholder="password") }} 
+    </div>
+    <div class="">
+    {{ form.email(class_="p-4 text-lg border-2 bg-gray-100 border-gray-200 flex rounded focus:outline-none", value=user.email, placeholder=user.email) }}
+    </div>
+    <div class="">
+    {{ form.mobile(class_="p-4 text-lg border-2 bg-gray-100 border-gray-200 flex rounded focus:outline-none", value=user.mobile, placeholder=user.mobile) }} 
+    <div>  
+        <button class="flex mt-4 bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200">{{ form.submit }}</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

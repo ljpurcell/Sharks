@@ -41,6 +41,7 @@ def create_app(config_type="development"):
         app.register_blueprint(api_blueprint)
         db.create_all()
 
+
     return app
 
 

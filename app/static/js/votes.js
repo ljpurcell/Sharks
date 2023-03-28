@@ -1,6 +1,6 @@
 "use strict";
 
-function submitVotes() {
+function submitVotes(rndString, dateString) {
   const playerOptions = [
     document.getElementById("playerMenu1").value,
     document.getElementById("playerMenu2").value,
@@ -17,7 +17,8 @@ function submitVotes() {
 
   if (validatedVotes.value) {
     const voteAssignments = {
-      roundID: "TEST",
+      round: rndString,
+      date: dateString,
       voteGiverID: "TEST",
       assignedVotes: validatedVotes.votes,
     };
