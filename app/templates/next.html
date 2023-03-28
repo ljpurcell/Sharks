@@ -1,12 +1,14 @@
 {% extends "base.html" %} {% block title %} Bullsharks - Next game {% endblock
 %} {% block page_content %}
-<div class=""><h1>Next Game</h1></div>
-<div>
-  <ul>
-    <li>{{ next_game.round }}</li>
-    <li>{{ next_game.date_str }}</li>
-    <li>{{ next_game.time_str }}</li>
-    <li>{{ next_game.teams }}</li>
-  </ul>
+<div class="flex justify-center">
+  <div>
+    <h1 class="text-3xl font-bold my-4">Next Game</h1>
+    <ul class="my-2 text-lg">
+      <li>{{ next_game.round }}</li>
+      <li>{{ next_game.date_str }}</li>
+      <li>{{ next_game.time_str }}</li>
+      <li>{{ next_game.teams }}</li>
+    </ul>
+  </div>
 </div>
 {% endblock %}

@@ -1,8 +1,28 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %} Register {% endblock %}</h1>
 {% endblock %} {% block page_content %}
-<form method="POST">
-  {{ form.csrf_token }} {{ form.username }} {{ form.password }} {{ form.email }}
-  {{ form.mobile }} {{ form.submit }}
-</form>
+<div class="flex flex-wrap justify-center">
+  <form method="POST" autocomplete="off" class="space-y-4">
+    <div class="flex justify-center text-sm">
+  <a href="{{url_for('auth.login')}}" class="mx-1 text-gray-500">Login</a>
+  if you've signed up already!
+</div>
+  {{ form.csrf_token }} 
+    <div>
+    {{ form.username(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }} 
+    </div>
+    <div class="">
+    {{ form.password(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }} 
+    </div>
+    <div class="">
+    {{ form.email(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }}
+    </div>
+    <div class="">
+    {{ form.mobile(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }} 
+    <div>  
+        <button class="flex mt-4 bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200">{{ form.submit }}</button>
+    </div>
+  </form>
+</div>
+
 {% endblock %}

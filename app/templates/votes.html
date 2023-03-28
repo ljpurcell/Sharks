@@ -11,18 +11,20 @@
 
 {% endblock scripts %} {% block title %} Bullsharks - Votes {% endblock title %}
 {% block page_content %}
-<div class=""><h1>Votes for {{ prev_game.round }}</h1></div>
-<h3>Game details:</h3>
-<div>
-  <ul>
-    <li>{{ prev_game.date_str }}</li>
-    <li>{{ prev_game.time_str }}</li>
-    <li>{{ prev_game.teams }}</li>
-  </ul>
+
+<div class="flex justify-center">
+  <div>
+    <h1 class="text-3xl font-bold my-4">Votes for {{ prev_game.round }}</h1>
+    <ul class="my-2 text-lg">
+      <li>{{ prev_game.date_str }}</li>
+      <li>{{ prev_game.time_str }}</li>
+      <li>{{ prev_game.teams }}</li>
+    </ul>
+  </div>
 </div>
 
-<form class="" action="" method="post">
-  <div class="">
+<form class="p-24 mx-auto space-y-8" action="" method="post">
+  <div class="flex justify-between">
     <div class="">
       <label for="player">Player</label>
       <select id="playerMenu1" class="">
@@ -46,7 +48,7 @@
 
   <hr />
 
-  <div class="">
+  <div class="flex justify-between">
     <div class="">
       <label for="player">Player</label>
 
@@ -71,7 +73,7 @@
 
   <hr />
 
-  <div class="">
+  <div class="flex justify-between">
     <div class="">
       <label for="player">Player</label>
 
@@ -96,7 +98,12 @@
 </form>
 
 <div>
-  <button class="" onclick="submitVotes()">Submit votes</button>
+  <button
+    class="flex bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200"
+    onclick="submitVotes()"
+  >
+    Submit votes
+  </button>
 </div>
 
 {% endblock page_content %}

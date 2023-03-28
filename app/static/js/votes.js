@@ -100,7 +100,7 @@ async function postVotesToApi(votes) {
     body: JSON.stringify(votes),
   });
 
-  if (response.ok) {
+  if (response) {
     const message = await response.json();
     Swal.fire({
       icon: "success",

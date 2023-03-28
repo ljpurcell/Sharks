@@ -1,7 +1,10 @@
 {% extends 'base.html' %} {% block title %} Home {% endblock %} {% block
 page_content %}
-<div>
-  <img src="{{url_for('static', filename='images/sharks-logo.webp')}}" />
+<div class="flex h-96">
+  <img
+    class="m-auto"
+    src="{{url_for('static', filename='images/sharks-logo.webp')}}"
+  />
 </div>
 {% endblock%}
 <!-- Add ability to post words of encouragement here side by side with comments from last game -->

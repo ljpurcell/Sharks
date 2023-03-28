@@ -2,7 +2,8 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
   {% block scripts %} {% endblock scripts %}
 </head>
@@ -14,7 +15,7 @@
 
 
 <nav class="w-full bg-black border-b-2 border-gray-500 text-xl md:text-lg" id="navbar">
-  <div class="container flex flex-wrap items-center justify-between mx-auto">
+  <div class="container md:flex md:flex-wrap md:items-center md:justify-between md:mx-auto">
 
   
 
@@ -25,30 +26,37 @@
 
   <div class="flex flex-wrap justify-between mx-4">
 
-  
+  <a class="text-white" href={{ url_for('main.index') }}>
       <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-          <a class="text-white" href={{ url_for('main.index') }}>Home</a>
+          Home
       </button>
+      </a>
 
+      <a class="text-white" href={{ url_for('main.votes') }}>
     <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-      
-          <a class="text-white" href={{ url_for('main.votes') }}>Votes</a>
-
+          Votes
   </button>
+  </a>
 
+  <a class="text-white" href={{ url_for('main.next_game') }}>
     <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-          <a class="text-white" href={{ url_for('main.next_game') }}>Next game</a>
+          Next game
   </button>
+  </a>
 
   {% if user and user.is_authenticated %}
+  <a class="text-white" href={{ url_for('auth.logout') }}>
   <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-      <a class="text-white" href={{ url_for('auth.logout') }}>Logout</a>
+      Logout
     </button> 
+    </a>
 
 {% else %}
+<a class="text-white" href={{ url_for('auth.login') }}>
     <button class="hover:bg-slate-500 p-4 m-2 rounded-md">
-      <a class="text-white" href={{ url_for('auth.login') }}>Login</a>
+      Login
     </button> 
+    </a>
 {% endif %}
 
   </div>
@@ -62,18 +70,18 @@
   messages %} {% for category, message in messages %} {% if category ==
   'success' %}
 
-  <div class="max-w-screen-sm bg-green-100 border-2 border-green-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
+  <div id="flash_message" class="max-w-screen-sm bg-green-100 border-2 border-green-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
     {{message}} 
-    <button type="button" class="" data-dismiss="alert">
+    <button type="button" onclick="removeFlash()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
 
   {% else %}
 
-  <div class="max-w-screen-sm bg-yellow-100 border-2 border-yellow-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
+  <div id="flash_message" class="max-w-screen-sm bg-yellow-100 border-2 border-yellow-200 flex justify-between p-4 my-2 mx-auto rounded" role="alert">
     {{message}}
-    <button type="button" class="" data-dismiss="alert">
+    <button type="button" onclick="removeFlash()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
