@@ -9,6 +9,14 @@ import json
 @api.route('/record-votes', methods=['POST'])
 @login_required
 def record_votes():
-    req = request.json
-    print(req)
+    data = request.json
+    print(data)
+    # TODO Create new vote assignment for each in array
+    for assignment in data['assignedVotes']:
+        # season_id
+        # round
+        # vote giver
+        # vote getter
+        # number of votes
+
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}

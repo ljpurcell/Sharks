@@ -1,6 +1,6 @@
 "use strict";
 
-function submitVotes(rndString, dateString) {
+function submitVotes(seasonString, rndString, dateString) {
   const playerOptions = [
     document.getElementById("playerMenu1").value,
     document.getElementById("playerMenu2").value,
@@ -17,6 +17,7 @@ function submitVotes(rndString, dateString) {
 
   if (validatedVotes.value) {
     const voteAssignments = {
+      season: seasonString,
       round: rndString,
       date: dateString,
       voteGiverID: "TEST",
@@ -106,7 +107,7 @@ async function postVotesToApi(votes) {
     Swal.fire({
       icon: "success",
       title: "Nice!",
-      text: message,
+      text: votes.message,
       timer: 4000,
       showConfirmButton: false,
     }).then(() => {

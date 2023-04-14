@@ -1,6 +1,7 @@
 class Game:
-    def __init__(self, round, date_time, location, teams):
+    def __init__(self, season_id, round, date_time, location, teams):
         import datetime
+        self.season_id = season_id
         self.round = round
         self.date_time = date_time
         self.time_str = self.date_time.strftime("%I:%M %p") 

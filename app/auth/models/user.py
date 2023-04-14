@@ -5,6 +5,21 @@ from itsdangerous import URLSafeTimedSerializer
 from flask import current_app as app
 
 
+user_votes = db.Table('user_votes', 
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),  
+    db.Column('vote_assignment_id', db.Integer, db.ForeignKey('vote_assignments.id'))                                                        
+)
+
+class VoteAssignment(db.Model):
+    __tablename__ = 'vote_assignments'
+    id = db.Column(db.Integer, primary_key=True)
+    season_id = db.Column(db.String(5), nullable=False)
+    round = db.Column(db.Integer, nullable=False)
+    voter = db.Column(db.Integer, nullable=False)
+    vote_getter = db.Column(db.Integer, nullable=False)
+    num_votes = db.Column(db.Integer, nullable=False)
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,6 +31,10 @@ class User(db.Model, UserMixin):
     mobile = db.Column(db.String, nullable=False)
     is_confirmed_mobile = db.Column(db.Boolean, nullable=False, default=False)
     mobile_confirmed_on = db.Column(db.DateTime)
+    votes = db.relationship('VoteAssignment',
+                            secondary=user_votes,
+                            backref=db.backref('users', lazy='dynamic'),
+                            lazy='dynamic')
     
 
     def __repr__(self):
@@ -73,3 +92,5 @@ class User(db.Model, UserMixin):
             return mobile
         except Exception:
             return False
+        
+

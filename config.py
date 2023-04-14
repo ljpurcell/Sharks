@@ -34,7 +34,7 @@ class DevelopmentConfig(Config):
     APP_URL='localhost'
     ENV="development"
     DEBUG = True
-    SERVER_NAME='192.168.20.3:5000' 
+    SERVER_NAME='127.0.0.1:5000' 
     SQLALCHEMY_DATABASE_URI = env.get('DEV_DATABASE_URL', 'sqlite:///' + path.join(basedir, 'data-dev.sqlite'))
     PREFERRED_URL_SCHEME='http'
     

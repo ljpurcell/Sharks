@@ -1,4 +1,6 @@
-URL = "https://www.playhq.com/basketball-victoria/org/sharks-basketball-club-geelong/b78f41ba/gub-community-competitions-summer-202223/teams/bull-sharks-div2-men/4b014ac5"
+from os import environ as env
+
+URL = env.get('SCHEDULE_URL')
 
 def scrape_site(url):
     import requests
@@ -33,11 +35,12 @@ def create_season(rounds):
         return "Bull Sharks - BYE" if len(tms) < 2 else f"{tms[0].text} vs. {tms[1].text}"
 
     def create_game(round):
+        ssn = env.get('SEASON_ID')
         rnd = round.find("h3", {"class":"sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
         dt = get_date_time(round)
         loc = "BYE" if round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}) == None else round.find("a", {"class":"sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
         tms = get_teams(round)
-        return Game(rnd, dt, loc, tms)
+        return Game(ssn, rnd, dt, loc, tms)
 
     season = []
     for round in rounds:
