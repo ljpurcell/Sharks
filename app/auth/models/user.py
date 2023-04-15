@@ -15,9 +15,17 @@ class VoteAssignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     season_id = db.Column(db.String(5), nullable=False)
     round = db.Column(db.Integer, nullable=False)
-    voter = db.Column(db.Integer, nullable=False)
+    vote_giver = db.Column(db.Integer, nullable=False)
     vote_getter = db.Column(db.Integer, nullable=False)
     num_votes = db.Column(db.Integer, nullable=False)
+
+
+class GameRSVP(db.Model):
+    __tablename__ = 'game_rsvps'
+    id = db.Column(db.Integer, primary_key=True)
+    game_date = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    is_playing = db.Column(db.Boolean, nullable=False)
 
 
 class User(db.Model, UserMixin):
@@ -31,6 +39,7 @@ class User(db.Model, UserMixin):
     mobile = db.Column(db.String, nullable=False)
     is_confirmed_mobile = db.Column(db.Boolean, nullable=False, default=False)
     mobile_confirmed_on = db.Column(db.DateTime)
+    game_rsvps = db.relationship('GameRSVP', backref='user')
     votes = db.relationship('VoteAssignment',
                             secondary=user_votes,
                             backref=db.backref('users', lazy='dynamic'),
@@ -71,11 +80,7 @@ class User(db.Model, UserMixin):
     
     def generate_email_token(self, email):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return app.config['APP_URL'] + '/confirm-email/' + serializer.dumps(email, salt=app.config['SECURITY_SALT'])
-    
-    def generate_mobile_token(self, mobile):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        return app.config['APP_URL'] + '/confirm-mobile/' + serializer.dumps(mobile, salt=app.config['SECURITY_SALT'])
+        return app.config['APP_URL'] + '/confirm-email/' + serializer.dumps(email, salt="email-token")
 
     def confirm_email_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -85,11 +90,28 @@ class User(db.Model, UserMixin):
         except Exception:
             return False
         
+    def generate_mobile_token(self, mobile):
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        return app.config['APP_URL'] + '/confirm-mobile/' + serializer.dumps(mobile, salt="mobile-token")
+        
     def confirm_mobile_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
             mobile = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
             return mobile
+        except Exception:
+            return False
+
+    def generate_rsvp_token(self, date):
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        details = [self.id, date]
+        return app.config['APP_URL'] + '/rsvp/' + serializer.dumps(details, salt="rsvp-token")
+        
+    def confirm_rsvp_token(self, token, expiration=86400):
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        try:
+            response = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
+            return response
         except Exception:
             return False
         

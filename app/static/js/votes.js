@@ -20,7 +20,6 @@ function submitVotes(seasonString, rndString, dateString) {
       season: seasonString,
       round: rndString,
       date: dateString,
-      voteGiverID: "TEST",
       assignedVotes: validatedVotes.votes,
     };
     try {
