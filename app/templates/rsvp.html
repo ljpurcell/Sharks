@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block scripts %}
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.all.min.js') }}"
+></script>
+
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='js/rsvp.js') }}"
+></script>
+
+{% endblock scripts %} {% block title %} Availability {% endblock title %} {% block
+page_content %}
+
+<div class="flex justify-center">
+  <div>
+    <h1 class="text-3xl font-bold my-4">Confirming your availability for {{ next_game.round }}</h1>
+    <ul class="my-2 text-lg">
+      <li>{{ next_game.date_str }}</li>
+      <li>{{ next_game.time_str }}</li>
+      <li>{{ next_game.teams }}</li>
+    </ul>
+  </div>
+</div>
+
+<form class="p-24 mx-auto space-y-8" action="" method="post">
+  <div class="flex justify-between">
+    <div class="">
+      <label for="playing">I am:</label>
+      <select id="playing" class="">
+        <option selected></option>
+        <option>PLAYING</option>
+        <option>NOT PLAYING</option>
+      </select>
+    </div>
+    <div>
+  <button
+    class="flex bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200"
+    onclick="submitAvailability('{{user}}','{{token}}',)"
+  >
+    Submit availability
+  </button>
+</div>
+</form>
+
+
+
+{% endblock page_content %}

@@ -87,7 +87,7 @@ def confirm_mobile(token):
         return redirect(url_for('main.index'))
 
     mobile = current_user.confirm_mobile_token(token)
-    user = User.query.filter_by(email=current_user.mobile).first_or_404()
+    user = User.query.filter_by(mobile=current_user.mobile).first_or_404()
     
     if user.mobile == mobile:
         user.is_confirmed_mobile = True
@@ -131,7 +131,7 @@ def send_async_welcome_text(user_id):
         message = client.messages.create(
                 body=message_body,
                 from_=app.config['TWILIO_PHONE_NUMBER'],
-                # Hard coded. Need function to transform user mobile into internationally valid
+                # TODO Need function to transform user mobile into internationally valid
                 to=env.get('MY_NUMBER') 
             )
 

@@ -9,7 +9,7 @@ from app.schedule.next_and_prev_game import NextGame
 
 def generate_message_body(next_game, user):
   if next_game is None:
-    message_body = "Well done on the season. The whole world is looking like shark bait at the minute\n\nBe sure to rest up and hit the practice court in the off-season.\n\nStay tuned for Sharks Brownlow."
+    message_body = "Well done on the season -- thanks for being a part of this cut-throat unit... Got the whole world is looking like shark bait at the minute!\n\nBe sure to rest up and hit the practice court in the off-season.\n\nStay tuned for Sharks Brownlow."
   elif next_game.is_bye:
     message_body = next_game.round + " - " + next_game.date_str + "\n\n" + next_game.teams
   else:
@@ -17,7 +17,6 @@ def generate_message_body(next_game, user):
   return message_body
 
 
-# TODO query db for all users
 team_members = User.query.all()
 
 for team_member in team_members:
@@ -26,3 +25,4 @@ for team_member in team_members:
     from_=app.config['TWILIO_PHONE_NUMBER'],
     to=team_member.mobile
   )
+  print(message)

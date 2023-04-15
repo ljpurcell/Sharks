@@ -52,13 +52,14 @@ class User(db.Model, UserMixin):
     @staticmethod
     def create_new_user(database, data):
         hashed_password = generate_password_hash(data.password.data)
+        mobile_globalised = User.try_globalise_number(data.mobile.data)
         new_user = User(
             username=data.username.data, 
             password_hash=hashed_password, 
             email=data.email.data,
             is_confirmed_email=False,
             email_confirmed_on=None,
-            mobile=data.mobile.data,
+            mobile=mobile_globalised,
             is_confirmed_mobile=False,
             mobile_confirmed_on=None,
             )
@@ -76,6 +77,13 @@ class User(db.Model, UserMixin):
         user_to_update.mobile=data.mobile.data
         database.session.commit()
         return user_to_update 
+    
+    @staticmethod
+    def try_globalise_number(mob_number):
+        if len(mob_number) == 10 and mob_number[0] == '0':
+            return "+61" + mob_number[1:]
+        else:
+            return mob_number
 
     
     def generate_email_token(self, email):
@@ -85,7 +93,7 @@ class User(db.Model, UserMixin):
     def confirm_email_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            email = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
+            email = serializer.loads(token, salt="email-token", max_age=expiration)
             return email
         except Exception:
             return False
@@ -97,20 +105,20 @@ class User(db.Model, UserMixin):
     def confirm_mobile_token(self, token, expiration=3600):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            mobile = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
+            mobile = serializer.loads(token, salt="mobile-token", max_age=expiration)
             return mobile
         except Exception:
             return False
 
-    def generate_rsvp_token(self, date):
+    def generate_rsvp_token(self, date_str):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        details = [self.id, date]
+        details = [self.id, date_str]
         return app.config['APP_URL'] + '/rsvp/' + serializer.dumps(details, salt="rsvp-token")
         
     def confirm_rsvp_token(self, token, expiration=86400):
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            response = serializer.loads(token, salt=app.config['SECURITY_SALT'], max_age=expiration)
+            response = serializer.loads(token, salt="rsvp-token", max_age=expiration)
             return response
         except Exception:
             return False
