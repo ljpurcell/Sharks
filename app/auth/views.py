@@ -11,13 +11,13 @@ import datetime
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id: int|str) -> User:
     return db.get_or_404(User, int(user_id))
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form: LoginForm = LoginForm()
     if form.validate_on_submit():
         user = db.one_or_404(db.select(User).filter_by(username=form.username.data))
         if user:
@@ -35,7 +35,7 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User.create_new_user(database=db, data=form)
+        user: User = User.create_new_user(database=db, data=form)
         login_user(user, remember=True)
         flash('Nice! You will be sent a verification email and text shortly.', category='success')
         queue.enqueue(send_async_welcome_email, user.id)
@@ -59,13 +59,13 @@ def my_profile():
 
 @auth.route('/confirm-email/<token>')
 @login_required
-def confirm_email(token):
+def confirm_email(token: str):
     if current_user.is_confirmed_email:
         flash('Email already confirmed', 'success')
         return redirect(url_for('main.index'))
 
-    email = current_user.confirm_email_token(token)
-    user = db.one_or_404(db.select(User).filter_by(email=current_user.email))
+    email: str = current_user.confirm_email_token(token)
+    user: User = db.one_or_404(db.select(User).filter_by(email=current_user.email))
     
     if user.email == email:
         user.is_confirmed_email = True
@@ -81,7 +81,7 @@ def confirm_email(token):
 
 @auth.route('/confirm-mobile/<token>')
 @login_required
-def confirm_mobile(token):
+def confirm_mobile(token: str):
     if current_user.is_confirmed_mobile:
         flash('Mobile already confirmed', 'success')
         return redirect(url_for('main.index'))
@@ -110,23 +110,23 @@ def logout():
 
 
 
-def send_async_welcome_email(user_id):    
+def send_async_welcome_email(user_id: int|str) -> None:    
     app = create_app() 
 
     with app.app_context():
-        user = db.get_or_404(User, int(user_id))
-        msg = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
+        user: User = db.get_or_404(User, int(user_id))
+        msg: Message = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
         msg.subject = 'Welcome!'
         msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: ' + user.generate_email_token(user.email)
         mail.send(msg)
 
 
-def send_async_welcome_text(user_id):
+def send_async_welcome_text(user_id: int|str):
     from twilio.rest import Client
     app = create_app()
     with app.app_context():
-        user = db.get_or_404(User, int(user_id))
-        client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
+        user: User = db.get_or_404(User, int(user_id))
+        client: Client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
         message_body = f'Hi {user.username}!\n\nPlease verify your mobile by clicking this link and following the prompts: ' + user.generate_mobile_token(user.mobile)
         message = client.messages.create(
                 body=message_body,

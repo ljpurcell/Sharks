@@ -7,20 +7,20 @@ from app import db
 
 
 class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
-    submit = SubmitField('Log in!')
+    username: StringField = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
+    password: PasswordField = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
+    submit: SubmitField = SubmitField('Log in!')
 
 
 class UserDetailsForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4,max=30)])
-    password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)])
-    email = EmailField(validators=[InputRequired()])
-    mobile = StringField(validators=[InputRequired()])
-    submit = SubmitField('Save!')
+    username: StringField = StringField(validators=[InputRequired(), Length(min=4,max=30)])
+    password: PasswordField = PasswordField(validators=[InputRequired(), Length(min=4,max=30)])
+    email: EmailField = EmailField(validators=[InputRequired()])
+    mobile: StringField = StringField(validators=[InputRequired()])
+    submit: SubmitField = SubmitField('Save!')
 
-    def validate_username(self, username):
-        existing_username = db.one_or_404(db.select(User).filter_by(username=username.data))
+    def validate_username(self, username: str):
+        existing_username: str = db.one_or_404(db.select(User).filter_by(username=username.data: str))
 
         if existing_username:
             flash("That username is already taken, sorry.")
@@ -29,11 +29,11 @@ class UserDetailsForm(FlaskForm):
 
 
 class RegistrationForm(UserDetailsForm):
-    username = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
-    email = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})
-    mobile = StringField(validators=[InputRequired()],render_kw={"placeholder":"Mobile"})
-    submit = SubmitField('Register!')
+    username: StringField = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
+    password: PasswordField = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
+    email: EmailField = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})
+    mobile: StringField = StringField(validators=[InputRequired()],render_kw={"placeholder":"Mobile"})
+    submit: SubmitField = SubmitField('Register!')
         
 
 

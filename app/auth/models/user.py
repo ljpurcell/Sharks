@@ -3,6 +3,12 @@ from flask_login import UserMixin, current_user
 from flask_bcrypt import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app as app
+from datetime import datetime
+from app.auth.models.user import User
+from flask_sqlalchemy import SQLAlchemy
+from typing import Any
+
+
 
 
 user_votes = db.Table('user_votes', 
@@ -11,34 +17,34 @@ user_votes = db.Table('user_votes',
 )
 
 class VoteAssignment(db.Model):
-    __tablename__ = 'vote_assignments'
-    id = db.Column(db.Integer, primary_key=True)
-    season_id = db.Column(db.String(5), nullable=False)
-    round = db.Column(db.Integer, nullable=False)
-    vote_giver = db.Column(db.Integer, nullable=False)
-    vote_getter = db.Column(db.Integer, nullable=False)
-    num_votes = db.Column(db.Integer, nullable=False)
+    __tablename__: str = 'vote_assignments'
+    id: int = db.Column(db.Integer, primary_key=True)
+    season_id: str = db.Column(db.String(5), nullable=False)
+    round: int = db.Column(db.Integer, nullable=False)
+    vote_giver: int = db.Column(db.Integer, nullable=False)
+    vote_getter: int = db.Column(db.Integer, nullable=False)
+    num_votes: int = db.Column(db.Integer, nullable=False)
 
 
 class GameRSVP(db.Model):
-    __tablename__ = 'game_rsvps'
-    id = db.Column(db.Integer, primary_key=True)
-    game_date = db.Column(db.String(15), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    is_playing = db.Column(db.Boolean, nullable=False)
+    __tablename__: str = 'game_rsvps'
+    id: int = db.Column(db.Integer, primary_key=True)
+    game_date: str = db.Column(db.String(15), nullable=False)
+    user_id: int = db.Column(db.Integer, db.ForeignKey('users.id'))
+    is_playing: bool = db.Column(db.Boolean, nullable=False)
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True)
-    password_hash = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String, nullable=False)
-    is_confirmed_email = db.Column(db.Boolean, nullable=False, default=False)
-    email_confirmed_on = db.Column(db.DateTime)
-    mobile = db.Column(db.String, nullable=False)
-    is_confirmed_mobile = db.Column(db.Boolean, nullable=False, default=False)
-    mobile_confirmed_on = db.Column(db.DateTime)
+    __tablename__: str = 'users'
+    id: int = db.Column(db.Integer, primary_key=True)
+    username: str = db.Column(db.String(30), unique=True)
+    password_hash: bytes = db.Column(db.String(80), nullable=False)
+    email: str = db.Column(db.String, nullable=False)
+    is_confirmed_email: bool = db.Column(db.Boolean, nullable=False, default=False)
+    email_confirmed_on: datetime = db.Column(db.DateTime)
+    mobile: str = db.Column(db.String, nullable=False)
+    is_confirmed_mobile: bool = db.Column(db.Boolean, nullable=False, default=False)
+    mobile_confirmed_on: datetime = db.Column(db.DateTime)
     game_rsvps = db.relationship('GameRSVP', backref='user')
     votes = db.relationship('VoteAssignment',
                             secondary=user_votes,
@@ -50,10 +56,10 @@ class User(db.Model, UserMixin):
         return '<User %r>' % self.username
     
     @staticmethod
-    def create_new_user(database, data):
-        hashed_password = generate_password_hash(data.password.data)
-        mobile_globalised = User.try_globalise_number(data.mobile.data)
-        new_user = User(
+    def create_new_user(database: SQLAlchemy, data: Any) -> User:
+        hashed_password: bytes = generate_password_hash(data.password.data)
+        mobile_globalised: str = User.try_globalise_number(data.mobile.data)
+        new_user: User = User(
             username=data.username.data, 
             password_hash=hashed_password, 
             email=data.email.data,
@@ -68,9 +74,9 @@ class User(db.Model, UserMixin):
         return new_user 
     
     @staticmethod
-    def update_details(database, data):
-        hashed_password = generate_password_hash(data.password.data)
-        user_to_update = db.get_or_404(User, int(current_user.id))
+    def update_details(database: SQLAlchemy, data) -> User:
+        hashed_password: bytes = generate_password_hash(data.password.data)
+        user_to_update: User = db.get_or_404(User, int(current_user.id))
         user_to_update.username=data.username.data
         user_to_update.password_hash=hashed_password
         user_to_update.email=data.email.data
@@ -79,48 +85,48 @@ class User(db.Model, UserMixin):
         return user_to_update 
     
     @staticmethod
-    def try_globalise_number(mob_number):
+    def try_globalise_number(mob_number: str) -> str:
         if len(mob_number) == 10 and mob_number[0] == '0':
             return "+61" + mob_number[1:]
         else:
             return mob_number
 
     
-    def generate_email_token(self, email):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    def generate_email_token(self, email: str) -> str:
+        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         return app.config['APP_URL'] + '/confirm-email/' + serializer.dumps(email, salt="email-token")
 
-    def confirm_email_token(self, token, expiration=3600):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    def confirm_email_token(self, token: str, expiration: int = 3600) -> str | Exception:
+        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            email = serializer.loads(token, salt="email-token", max_age=expiration)
+            email: str = serializer.loads(token, salt="email-token", max_age=expiration)
             return email
-        except Exception:
-            return False
+        except Exception as err:
+            return err
         
-    def generate_mobile_token(self, mobile):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    def generate_mobile_token(self, mobile) -> str:
+        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         return app.config['APP_URL'] + '/confirm-mobile/' + serializer.dumps(mobile, salt="mobile-token")
         
-    def confirm_mobile_token(self, token, expiration=3600):
+    def confirm_mobile_token(self, token: str, expiration: int = 3600)-> str | Exception:
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            mobile = serializer.loads(token, salt="mobile-token", max_age=expiration)
+            mobile: str = serializer.loads(token, salt="mobile-token", max_age=expiration)
             return mobile
-        except Exception:
-            return False
+        except Exception as err:
+            return err
 
-    def generate_rsvp_token(self, date_str):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        details = [self.id, date_str]
+    def generate_rsvp_token(self, date_str: str) -> str:
+        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        details: tuple[int|str, str] = (self.id, date_str)
         return app.config['APP_URL'] + '/rsvp/' + serializer.dumps(details, salt="rsvp-token")
         
-    def confirm_rsvp_token(self, token, expiration=86400):
-        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    def confirm_rsvp_token(self, token: str, expiration: int = 86400) -> str | Exception:
+        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         try:
-            response = serializer.loads(token, salt="rsvp-token", max_age=expiration)
+            response: str = serializer.loads(token, salt="rsvp-token", max_age=expiration)
             return response
-        except Exception:
-            return False
+        except Exception as err:
+            return err
         
 

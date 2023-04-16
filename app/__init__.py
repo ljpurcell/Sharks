@@ -12,14 +12,14 @@ from config import config
 dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
 load_dotenv(dotenv_path=dotenv_path)
 
-mail = Mail()
-db = SQLAlchemy()
-queue = Queue(connection=Redis())
-login_manager = LoginManager()
+mail: Mail = Mail()
+db: SQLAlchemy = SQLAlchemy()
+queue: Queue = Queue(connection=Redis())
+login_manager: LoginManager = LoginManager()
 login_manager.login_view = 'auth.login'
 
 
-def create_app(config_type="development"):
+def create_app(config_type: str="development"):
     app = Flask(__name__)
 
     app.config.from_object(config[config_type])

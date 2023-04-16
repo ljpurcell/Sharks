@@ -18,21 +18,21 @@ def next_game():
 @main.route('/votes')
 @login_required
 def votes():
-    team = User.query.all()
+    team: list[User] = db.session.execute(db.select(User)).all()
     return render_template('votes.html', prev_game=PrevGame, team=team, user=current_user)
 
 
 @main.route('/rsvp/<token>', methods=['GET', 'POST'])
 @login_required
-def rsvp(token):
-    response = current_user.confirm_rsvp_token(token)
+def rsvp(token: str):
+    response: str = current_user.confirm_rsvp_token(token)
 
-    if request.method == 'GET' and response == [current_user.id, NextGame.date_str]:
+    if request.method == 'GET' and response == (current_user.id, NextGame.date_str):
         flash('Token valid. Please confirm whether or not you are playing!', 'success')
         return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     
-    elif request.method == 'POST' and response == [current_user.id, NextGame.date_str]:
-        rsvp = GameRSVP()
+    elif request.method == 'POST' and response == (current_user.id, NextGame.date_str):
+        rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = response[1]
         rsvp.user_id = response[0]
         db.session.add(rsvp)

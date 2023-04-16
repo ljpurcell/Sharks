@@ -1,5 +1,7 @@
+from datetime import datetime
+
 class Game:
-    def __init__(self, season_id, round, date_time, location, teams):
+    def __init__(self, season_id: int, round: str, date_time: datetime, location: str, teams: str):
         import datetime
         self.season_id = season_id
         self.round = round

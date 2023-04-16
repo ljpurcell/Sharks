@@ -4,16 +4,15 @@ from app.auth.models.user import User, VoteAssignment
 from . import api
 from app import db
 import json
+from typing import Any
 
 
 @api.route('/record-votes', methods=['POST'])
 @login_required
 def record_votes():
-    data = request.json
-    print(data)
-    print(current_user.id)
+    data: Any | None = request.json
     for assignment in data['assignedVotes']:
-        new_assignment = VoteAssignment()
+        new_assignment: VoteAssignment = VoteAssignment()
         new_assignment.season_id = data['season']
         new_assignment.round = data['round']
         new_assignment.vote_giver = current_user.id

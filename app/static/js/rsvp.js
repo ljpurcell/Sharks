@@ -1,9 +1,9 @@
 "use strict";
 
 function submitAvailability(player, token) {
-  const response = [document.getElementById("playing").value];
+  const response = document.getElementById("player_availability").value;
 
-  const is_playing = response == "PLAYING";
+  const is_playing = response === "PLAYING";
 
   try {
     postAvailabilityToApi(player, token, is_playing);

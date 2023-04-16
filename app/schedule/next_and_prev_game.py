@@ -1,12 +1,12 @@
 import sys
- 
+from app.schedule.game import Game
 
 sys.path.append('/Users/LJPurcell/Code/Sharks/app')
 
 from schedule.scraper import Season
 
-played = []
-still_to_play = []
+played: list[Game] = []
+still_to_play: list[Game] = []
 
 for rnd in Season:
     if rnd.been_played:
