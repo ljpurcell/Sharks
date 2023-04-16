@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from .user import User
+from app import db
 
 
 class LoginForm(FlaskForm):
@@ -19,9 +20,7 @@ class UserDetailsForm(FlaskForm):
     submit = SubmitField('Save!')
 
     def validate_username(self, username):
-        existing_username = User.query.filter_by(
-            username=username.data
-        ).first()
+        existing_username = db.one_or_404(db.select(User).filter_by(username=username.data))
 
         if existing_username:
             flash("That username is already taken, sorry.")

@@ -1,6 +1,7 @@
 from flask import current_app as app
 from app.auth.models.user import User
 from twilio.rest import Client
+from app import db
 
 
 client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
@@ -17,7 +18,7 @@ def generate_message_body(next_game, user):
   return message_body
 
 
-team_members = User.query.all()
+team_members = db.session.execute(db.select(User)).all()
 
 for team_member in team_members:
   message = client.messages.create(

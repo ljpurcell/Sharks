@@ -23,7 +23,7 @@ class VoteAssignment(db.Model):
 class GameRSVP(db.Model):
     __tablename__ = 'game_rsvps'
     id = db.Column(db.Integer, primary_key=True)
-    game_date = db.Column(db.DateTime, nullable=False)
+    game_date = db.Column(db.String(15), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     is_playing = db.Column(db.Boolean, nullable=False)
 
@@ -70,7 +70,7 @@ class User(db.Model, UserMixin):
     @staticmethod
     def update_details(database, data):
         hashed_password = generate_password_hash(data.password.data)
-        user_to_update = User.query.filter_by(id=current_user.id).first()
+        user_to_update = db.get_or_404(User, int(current_user.id))
         user_to_update.username=data.username.data
         user_to_update.password_hash=hashed_password
         user_to_update.email=data.email.data

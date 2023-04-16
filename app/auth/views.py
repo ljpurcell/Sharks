@@ -12,14 +12,14 @@ import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.get_or_404(User, int(user_id))
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = db.one_or_404(db.select(User).filter_by(username=form.username.data))
         if user:
             if check_password_hash(user.password_hash, form.password.data):
                 login_user(user, remember=True)
@@ -65,7 +65,7 @@ def confirm_email(token):
         return redirect(url_for('main.index'))
 
     email = current_user.confirm_email_token(token)
-    user = User.query.filter_by(email=current_user.email).first_or_404()
+    user = db.one_or_404(db.select(User).filter_by(email=current_user.email))
     
     if user.email == email:
         user.is_confirmed_email = True
@@ -87,7 +87,7 @@ def confirm_mobile(token):
         return redirect(url_for('main.index'))
 
     mobile = current_user.confirm_mobile_token(token)
-    user = User.query.filter_by(mobile=current_user.mobile).first_or_404()
+    user = db.one_or_404(db.select(User).filter_by(mobile=current_user.mobile))
     
     if user.mobile == mobile:
         user.is_confirmed_mobile = True
@@ -114,7 +114,7 @@ def send_async_welcome_email(user_id):
     app = create_app() 
 
     with app.app_context():
-        user = User.query.get(int(user_id))
+        user = db.get_or_404(User, int(user_id))
         msg = Message('[SharksApp] - Welcome', sender=env.get("GMAIL_USERNAME"), recipients=[user.email])
         msg.subject = 'Welcome!'
         msg.body = f'Hi {user.username},\n\nWelcome to SharksApp. Please authenticate your email by clicking the link: ' + user.generate_email_token(user.email)
@@ -125,13 +125,12 @@ def send_async_welcome_text(user_id):
     from twilio.rest import Client
     app = create_app()
     with app.app_context():
-        user = User.query.get(int(user_id))
+        user = db.get_or_404(User, int(user_id))
         client = Client(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
         message_body = f'Hi {user.username}!\n\nPlease verify your mobile by clicking this link and following the prompts: ' + user.generate_mobile_token(user.mobile)
         message = client.messages.create(
                 body=message_body,
                 from_=app.config['TWILIO_PHONE_NUMBER'],
-                # TODO Need function to transform user mobile into internationally valid
-                to=env.get('MY_NUMBER') 
+                to=user.mobile
             )
 

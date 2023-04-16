@@ -17,7 +17,7 @@ def record_votes():
         new_assignment.season_id = data['season']
         new_assignment.round = data['round']
         new_assignment.vote_giver = current_user.id
-        vote_getter = User.query.filter_by(username=assignment['player']).first()
+        vote_getter = db.one_or_404(db.select(User).filter_by(username=assignment['player']))
         new_assignment.vote_getter = vote_getter.id
         new_assignment.num_votes = assignment['votes']
         db.session.add(new_assignment)
