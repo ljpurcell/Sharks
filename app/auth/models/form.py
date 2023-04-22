@@ -20,7 +20,7 @@ class UserDetailsForm(FlaskForm):
     submit: SubmitField = SubmitField('Save!')
 
     def validate_username(self, username: str):
-        existing_username: str = db.one_or_404(db.select(User).filter_by(username=username.data: str))
+        existing_username: str = db.one_or_404(db.select(User).filter_by(username=username.data))
 
         if existing_username:
             flash("That username is already taken, sorry.")

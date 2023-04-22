@@ -41,7 +41,7 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     season: list[Game] = []
     for round in rounds:
-        season.append(create_game(round: PageElement))
+        season.append(create_game(round))
         
     
     return season
@@ -49,7 +49,7 @@ def create_season(rounds: PageElement) -> list[Game]:
 
 URL: str|None = env.get('SCHEDULE_URL')
 
-page = scrape_site(URL: str|None)
+page = scrape_site(URL)
 
 soup: BeautifulSoup = BeautifulSoup(page.content, "html.parser")
 rounds = soup.find_all('div', {"data-testid": "fixture-list"})

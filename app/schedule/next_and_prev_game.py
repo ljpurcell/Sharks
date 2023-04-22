@@ -1,20 +1,19 @@
-import sys
 from app.schedule.game import Game
-
-sys.path.append('/Users/LJPurcell/Code/Sharks/app')
-
 from schedule.scraper import Season
 
 played: list[Game] = []
 still_to_play: list[Game] = []
 
 for rnd in Season:
-    if rnd.been_played:
+    if rnd.been_played:tiv
         played.append(rnd)
     else:
         still_to_play.append(rnd)
 
-PrevGame = played[len(played)-1]
+if len(played) > 0:
+    PrevGame = played[len(played)-1]
+else:
+    PrevGame = None
 
 for rnd in played:
     if rnd.date_time > PrevGame.date_time:

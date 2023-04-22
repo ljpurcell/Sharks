@@ -4,7 +4,6 @@ from flask_bcrypt import generate_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app as app
 from datetime import datetime
-from app.auth.models.user import User
 from flask_sqlalchemy import SQLAlchemy
 from typing import Any
 
@@ -56,7 +55,7 @@ class User(db.Model, UserMixin):
         return '<User %r>' % self.username
     
     @staticmethod
-    def create_new_user(database: SQLAlchemy, data: Any) -> User:
+    def create_new_user(database: SQLAlchemy, data: Any):
         hashed_password: bytes = generate_password_hash(data.password.data)
         mobile_globalised: str = User.try_globalise_number(data.mobile.data)
         new_user: User = User(
@@ -74,7 +73,7 @@ class User(db.Model, UserMixin):
         return new_user 
     
     @staticmethod
-    def update_details(database: SQLAlchemy, data) -> User:
+    def update_details(database: SQLAlchemy, data):
         hashed_password: bytes = generate_password_hash(data.password.data)
         user_to_update: User = db.get_or_404(User, int(current_user.id))
         user_to_update.username=data.username.data
