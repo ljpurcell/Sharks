@@ -1,6 +1,5 @@
 from flask import current_app as app
 from twilio.rest import Client
-from os import environ as env
 from app.auth.models.user import User, GameRSVP
 from app.schedule.next_and_prev_game import NextGame
 import json
@@ -19,7 +18,7 @@ message_body: str = "Playing: " + \
     json.dumps(confirmed_playing) + "\n\nNot playing: " + \
     json.dumps(confirmed_out)
 
-if not PrevGame.is_bye:
+if not NextGame.is_bye:
     for team_member in team_members:
         message = client.messages.create(
             body=message_body,
