@@ -46,3 +46,4 @@ def create_app(config_type: str="development"):
 
 
 
+app = create_app()

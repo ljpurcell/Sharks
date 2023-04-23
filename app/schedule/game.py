@@ -12,3 +12,6 @@ class Game:
         self.teams = teams
         self.been_played = self.date_time < datetime.datetime.now()
         self.is_bye = self.location == "BYE"
+
+    def __str__(self) -> str:
+        return f"SSN: {self.season_id}, RND: {self.round}, DT: {self.date_time}, LOC: {self.location}, TMS: {self.teams}"

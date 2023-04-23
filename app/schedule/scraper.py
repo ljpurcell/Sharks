@@ -37,17 +37,22 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     def create_game(round: Tag) -> Game:
         ssn: str = env.get('SEASON_ID')
-        rnd: str = round.find(
-            "h3", {"class": "sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text
-        dt: datetime = get_date_time(round)
-        loc: str = "BYE" if round.find("a", {"class": "sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}
-                                       ) == None else round.find("a", {"class": "sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
-        tms: str = get_teams(round)
+        rnd: str = round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text if round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"}).text
+        if rnd == "Fixture has not yet been confirmed, dates and rounds are subject to change.":
+            dt: datetime | None = None
+            loc: str | None = None
+            tms: str | None = None
+        else:
+            dt: datetime | None = get_date_time(round)
+            loc: str | None = "BYE" if round.find("a", {"class": "sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}
+                                        ) == None else round.find("a", {"class": "sc-bqGHjH sc-10c3c88-16 kAtjCO ckPhRR"}).text
+            tms: str | None = get_teams(round)
         return Game(ssn, rnd, dt, loc, tms)
 
     season: list[Game] = []
     for round in rounds:
-        season.append(create_game(round))
+        # season.append(create_game(round))
+        print(create_game(round))
 
     return season
 
