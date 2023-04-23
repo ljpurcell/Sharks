@@ -14,9 +14,8 @@ confirmed_playing: list[User] = db.session.execute(
 confirmed_out: list[User] = db.session.execute(db.select(GameRSVP)).filter_by(
     date_str=NextGame.date_str, is_playing=False)
 
-message_body: str = "Playing: " + \
-    json.dumps(confirmed_playing) + "\n\nNot playing: " + \
-    json.dumps(confirmed_out)
+message_body: str = "Playing: " + json.dumps(confirmed_playing) + \
+    "\n\nNot playing: " + json.dumps(confirmed_out)
 
 if not NextGame.is_bye:
     for team_member in team_members:
