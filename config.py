@@ -51,7 +51,6 @@ class ProductionConfig(Config):
     ENV = "production"
     TESTING = False
     DEBUG = False
-    SERVER_NAME = ''  # TODO
     SQLALCHEMY_DATABASE_URI = env.get(
         'DATABASE_URL', 'sqlite:///' + path.join(basedir, 'data.sqlite'))
     PREFERRED_URL_SCHEME = 'https'
