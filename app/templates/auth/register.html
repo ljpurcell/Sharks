@@ -6,7 +6,7 @@
     <div class="flex justify-center text-sm">
       <a href="{{url_for('auth.login')}}" class="mx-1 text-gray-500">Login</a>if you've signed up already!
     </div>
-    {{ form.csrf_token }} 
+    {{ form.hidden_tag() }} 
     <div>
       {{ form.username(class_="p-4 border-2 bg-gray-100 border-gray-200 flex max-w-screen-sm rounded focus:outline-none") }} 
     </div>

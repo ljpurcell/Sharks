@@ -37,7 +37,7 @@ class User(db.Model, UserMixin):
     __tablename__: str = 'users'
     id: int = db.Column(db.Integer, primary_key=True)
     username: str = db.Column(db.String(30), unique=True)
-    password_hash: bytes = db.Column(db.String(80), nullable=False)
+    password_hash: bytes = db.Column(db.String(100), nullable=False)
     email: str = db.Column(db.String, nullable=False)
     is_confirmed_email: bool = db.Column(db.Boolean, nullable=False, default=False)
     email_confirmed_on: datetime = db.Column(db.DateTime)
@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
     
     @staticmethod
     def create_new_user(database: SQLAlchemy, data: Any):
-        hashed_password: bytes = generate_password_hash(data.password.data)
+        hashed_password: str = generate_password_hash(data.password.data).decode('utf-8')
         mobile_globalised: str = User.try_globalise_number(data.mobile.data)
         new_user: User = User(
             username=data.username.data, 

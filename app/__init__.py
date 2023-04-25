@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -28,6 +29,7 @@ def create_app(config_type: str="development"):
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    csrf = CSRFProtect(app)
 
     app.redis = Redis.from_url(app.config['REDIS_URL'])
     app.task_queue = Queue('shark-tasks', connection=app.redis)

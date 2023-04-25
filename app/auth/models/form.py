@@ -28,7 +28,7 @@ class UserDetailsForm(FlaskForm):
         
 
 
-class RegistrationForm(UserDetailsForm):
+class RegistrationForm(FlaskForm):
     username: StringField = StringField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Username"})
     password: PasswordField = PasswordField(validators=[InputRequired(), Length(min=4,max=30)], render_kw={"placeholder":"Password"})
     email: EmailField = EmailField(validators=[InputRequired()], render_kw={"placeholder":"Email"})

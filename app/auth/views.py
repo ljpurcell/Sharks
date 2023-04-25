@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, session
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import check_password_hash
 from flask_mail import Message
@@ -18,15 +18,14 @@ def load_user(user_id: int | str) -> User:
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if request.method == 'POST' and form.validate():
-        user = db.one_or_404(db.select(User).filter_by(username=form.username.data))
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).filter_by(username=form.username.data)).first()
         if user:
             if check_password_hash(user.password_hash, form.password.data):
                 login_user(user, remember=True)
                 flash('You are logged in!', category='success')
                 return redirect(url_for('main.index', user=current_user))
-            else:
-                flash('Incorrect details. Please try again.', category='error')
+        flash('Incorrect details. Please try again.', category='error')
     return render_template('auth/login.html', form=form)
 
 
