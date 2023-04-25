@@ -2,6 +2,7 @@ from flask import current_app as app
 from twilio.rest import Client
 from os import environ as env
 from app.auth.models.user import User
+from app import db
 
 from app.schedule.next_and_prev_game import PrevGame
 
