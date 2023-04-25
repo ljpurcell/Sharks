@@ -37,7 +37,7 @@ class User(db.Model, UserMixin):
     __tablename__: str = 'users'
     id: int = db.Column(db.Integer, primary_key=True)
     username: str = db.Column(db.String(30), unique=True)
-    password_hash: bytes = db.Column(db.String(100), nullable=False)
+    pw_hash: str = db.Column(db.String(100), nullable=False)
     email: str = db.Column(db.String, nullable=False)
     is_confirmed_email: bool = db.Column(db.Boolean, nullable=False, default=False)
     email_confirmed_on: datetime = db.Column(db.DateTime)
@@ -60,7 +60,7 @@ class User(db.Model, UserMixin):
         mobile_globalised: str = User.try_globalise_number(data.mobile.data)
         new_user: User = User(
             username=data.username.data, 
-            password_hash=hashed_password, 
+            pw_hash=hashed_password, 
             email=data.email.data,
             is_confirmed_email=False,
             email_confirmed_on=None,
@@ -74,10 +74,10 @@ class User(db.Model, UserMixin):
     
     @staticmethod
     def update_details(database: SQLAlchemy, data):
-        hashed_password: bytes = generate_password_hash(data.password.data)
+        hashed_password: str = generate_password_hash(data.password.data).decode('utf-8')
         user_to_update: User = db.get_or_404(User, int(current_user.id))
         user_to_update.username=data.username.data
-        user_to_update.password_hash=hashed_password
+        user_to_update.pw_hash=hashed_password
         user_to_update.email=data.email.data
         user_to_update.mobile=data.mobile.data
         database.session.commit()

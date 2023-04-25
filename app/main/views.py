@@ -18,7 +18,7 @@ def next_game():
 @main.route('/votes')
 @login_required
 def votes():
-    team: list[User] = db.session.execute(db.select(User)).all()
+    team: list[User] = db.session.scalars(db.select(User)).all()
     return render_template('votes.html', prev_game=PrevGame, team=team, user=current_user)
 
 

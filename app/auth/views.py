@@ -19,9 +19,9 @@ def load_user(user_id: int | str) -> User:
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = db.session.execute(db.select(User).filter_by(username=form.username.data)).first()
+        user = db.session.scalars(db.select(User).filter_by(username=form.username.data)).first()
         if user:
-            if check_password_hash(user.password_hash, form.password.data):
+            if check_password_hash(user.pw_hash, form.password.data):
                 login_user(user, remember=True)
                 flash('You are logged in!', category='success')
                 return redirect(url_for('main.index', user=current_user))

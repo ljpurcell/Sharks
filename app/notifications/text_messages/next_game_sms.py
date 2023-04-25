@@ -24,7 +24,7 @@ def generate_message_body(next_game: Game, user: User) -> str:
     return message_body
 
 
-team_members: list[User] = db.session.execute(db.select(User)).all()
+team_members: list[User] = db.session.scalars(db.select(User)).all()
 
 for team_member in team_members:
     message = client.messages.create(
