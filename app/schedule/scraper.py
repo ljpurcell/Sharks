@@ -6,7 +6,7 @@ from datetime import datetime
 
 def scrape_site(url: str | None):
     if not url:
-        return ValueError("URL for fixture not found")
+        raise ValueError("URL for fixture not found")
 
     import requests
 
@@ -66,9 +66,7 @@ URL: str | None = env.get('SCHEDULE_URL')
 
 page = scrape_site(URL)
 
-content = page.content
-
-soup: BeautifulSoup = BeautifulSoup(content, "html.parser")
+soup: BeautifulSoup = BeautifulSoup(page.content, "html.parser")
 rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 
 Season = create_season(rounds)
