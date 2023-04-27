@@ -66,7 +66,9 @@ URL: str | None = env.get('SCHEDULE_URL')
 
 page = scrape_site(URL)
 
-soup: BeautifulSoup = BeautifulSoup(page.content, "html.parser")
+content = page.content
+
+soup: BeautifulSoup = BeautifulSoup(content, "html.parser")
 rounds = soup.find_all('div', {"data-testid": "fixture-list"})
 
 Season = create_season(rounds)
