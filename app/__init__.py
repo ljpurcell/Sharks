@@ -5,13 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from redis import Redis
 from rq import Queue
-from dotenv import load_dotenv
 from config import config
 
-
-# TODO - Make dotenv_path accessible by flask app and not hard coded
-dotenv_path = '/Users/LJPurcell/Code/Sharks/.env'
-load_dotenv(dotenv_path=dotenv_path)
 
 mail: Mail = Mail()
 db: SQLAlchemy = SQLAlchemy()
