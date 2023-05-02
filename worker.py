@@ -1,11 +1,11 @@
-from app import app
+from os import environ as env
 
 import redis
 from rq import Worker, Queue, Connection
 
 listen = ['default']
 
-redis_url = app.config['REDIS_URL']
+redis_url = str(env.get('REDIS_URL'))
 
 conn = redis.from_url(redis_url)
 
