@@ -46,6 +46,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    APP_URL="https://sharks-team-app.herokuapp.com"
     ENV = "production"
     TESTING = False
     DEBUG = False
