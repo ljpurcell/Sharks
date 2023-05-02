@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, flash, session
+from flask import redirect, render_template, url_for, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import check_password_hash
 from flask_mail import Message
@@ -114,7 +114,7 @@ def logout():
 
 
 def send_async_welcome_email(user_id: int | str) -> None:
-    app = create_app()
+    app = create_app("production")
 
     with app.app_context():
         user: User = db.get_or_404(User, int(user_id))
@@ -128,7 +128,7 @@ def send_async_welcome_email(user_id: int | str) -> None:
 
 def send_async_welcome_text(user_id: int | str):
     from twilio.rest import Client
-    app = create_app()
+    app = create_app("production")
     with app.app_context():
         user: User = db.get_or_404(User, int(user_id))
         client: Client = Client(
