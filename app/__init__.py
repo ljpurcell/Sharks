@@ -27,7 +27,7 @@ def create_app(config_type: str="development"):
     csrf = CSRFProtect(app)
 
     app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.task_queue = Queue('shark-tasks', connection=app.redis)
+    app.task_queue = Queue('default', connection=app.redis)
 
 
     with app.app_context():
