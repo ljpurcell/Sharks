@@ -51,7 +51,7 @@ class ProductionConfig(Config):
     TESTING = False
     DEBUG = False
     PREFERRED_URL_SCHEME = 'https'
-    SQLALCHEMY_DATABASE_URI="postgresql://owtqqjcigndmnv:0d118709c01b5a7892806a77e0bb1e45a361ebda4c79d48a97cab74c6713f931@ec2-44-206-204-65.compute-1.amazonaws.com:5432/d9uehevsdiggqm"
+    SQLALCHEMY_DATABASE_URI = str(env.get('DATABASE_URL')).replace("://", "ql://", 1)
 
 
 config = {
