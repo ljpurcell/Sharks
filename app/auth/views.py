@@ -2,12 +2,16 @@ from flask import redirect, render_template, url_for, flash, session
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_bcrypt import check_password_hash
 from flask_mail import Message
-from app import db, login_manager, queue, mail, create_app
+from app import db, login_manager, mail, create_app
 from ..auth.models.form import LoginForm, UserDetailsForm, RegistrationForm
 from ..auth.models.user import User
 from . import auth
 from os import environ as env
 import datetime
+from rq import Queue
+from worker import conn
+
+q = Queue(connection=conn)
 
 
 @login_manager.user_loader
@@ -37,8 +41,8 @@ def register():
         login_user(user, remember=True)
         flash('Nice! You will be sent a verification email and text shortly.',
               category='success')
-        queue.enqueue(send_async_welcome_email, user.id)
-        queue.enqueue(send_async_welcome_text, user.id)
+        q.enqueue(send_async_welcome_email, user.id)
+        q.enqueue(send_async_welcome_text, user.id)
         return redirect(url_for('main.index', user=user))
 
     return render_template('auth/register.html', form=form)
