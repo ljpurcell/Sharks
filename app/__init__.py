@@ -26,9 +26,6 @@ def create_app(config_type: str="development"):
     login_manager.init_app(app)
     csrf = CSRFProtect(app)
 
-    app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.task_queue = Queue('default', connection=app.redis)
-
 
     with app.app_context():
         from .auth import auth as auth_blueprint
