@@ -90,7 +90,7 @@ def confirm_mobile(token: str):
         return redirect(url_for('main.index'))
 
     mobile = current_user.confirm_mobile_token(token)
-    user = db.one_or_404(db.select(User).filter_by(mobile=current_user.mobile))
+    user = db.session.execute(db.select(User).filter_by(mobile=current_user.mobile)).scalar_one()
 
     if user.mobile == mobile:
         user.is_confirmed_mobile = True
