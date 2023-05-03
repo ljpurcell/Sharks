@@ -1,15 +1,20 @@
-from crontab import CronTab
+from apscheduler.schedulers.blocking import BlockingScheduler
+from app.notifications.text_messages import next_game_sms, votes_sms, whose_playing
 
-cron = CronTab(user='LJPurcell')
-cron.remove_all() # Be careful to remove in the future
+sched = BlockingScheduler()
 
-schedule_game_text = cron.new(command='/Users/LJPurcell/Code/Sharks/prod/bin/python3 /Users/LJPurcell/Code/Sharks/app/notifications/text_messages/next_game_sms.py', comment="Next game text")
-schedule_game_text.setall('0 18 * * SUN')
+@sched.scheduled_job('cron', day_of_week='sun', hour=13)
+def next_game_text_job():
+    next_game_sms.send()
 
-schedule_game_text = cron.new(command='/Users/LJPurcell/Code/Sharks/prod/bin/python3 /Users/LJPurcell/Code/Sharks/app/notifications/text_messages/whose_playing.py', comment="Whose playing text")
-schedule_game_text.setall('0 12 * * MON')
 
-schedule_votes_text = cron.new(command='/Users/LJPurcell/Code/Sharks/prod/bin/python3 /Users/LJPurcell/Code/Sharks/app/notifications/text_messages/votes_sms.py', comment="Votes text")
-schedule_votes_text.setall('0 10 * * TUE')
+@sched.scheduled_job('cron', day_of_week='mon', hour=13)
+def whose_playing_text_job():
+    whose_playing.send()
 
-cron.write()
+
+@sched.scheduled_job('cron', day_of_week='tue', hour=10)
+def votes_text_job():
+    votes_sms.send()
+
+sched.start()
