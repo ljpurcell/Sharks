@@ -68,7 +68,7 @@ def confirm_email(token: str):
         return redirect(url_for('main.index'))
 
     email: str = current_user.confirm_email_token(token)
-    user: User = db.select(User).filter_by(email=current_user.email).first()
+    user: User = db.session.execute(db.select(User).filter_by(email=current_user.email)).scalar_one()
 
     if user.email == email:
         user.is_confirmed_email = True
