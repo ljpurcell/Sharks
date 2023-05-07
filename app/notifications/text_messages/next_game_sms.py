@@ -32,9 +32,8 @@ if now.weekday() == 6 and now.hour == 21:
         
         for team_member in team_members:
             if team_member.username == "Lyndon":
-                print("Message sent")
-                # message = client.messages.create(
-                #     body=generate_message_body(NextGame, team_member),
-                #     from_=app.config['TWILIO_PHONE_NUMBER'],
-                #     to=team_member.mobile
-                # )
+                message = client.messages.create(
+                    body=generate_message_body(NextGame, team_member),
+                    from_=app.config['TWILIO_PHONE_NUMBER'],
+                    to=team_member.mobile
+                )
