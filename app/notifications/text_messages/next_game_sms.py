@@ -1,5 +1,7 @@
+from datetime import datetime
+now = datetime.now()
 
-def send():
+if now.weekday == 6 and now.hour == 15:
     from app.schedule.next_and_prev_game import NextGame
     from flask import current_app as app
     from app.auth.models.user import User
