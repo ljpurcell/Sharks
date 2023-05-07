@@ -4,10 +4,9 @@ now = datetime.now()
 # Sunday (0) at 12pm (1 UTC)
 if now.weekday() == 6 and now.hour == 7:
     from app.schedule.next_and_prev_game import NextGame
-    from flask import current_app as app
     from app.auth.models.user import User
     from twilio.rest import Client
-    from app import db
+    from app import db, create_app
     from app.schedule.game import Game
 
     def generate_message_body(next_game: Game, user: User) -> str:
@@ -22,6 +21,8 @@ if now.weekday() == 6 and now.hour == 7:
                 ".\n\nClick this link (24H only) to RSVP: " + \
                 user.generate_rsvp_token(next_game.date_str)
         return message_body
+    
+    app = create_app("production")
 
     with app.app_context():
         client = Client(app.config['TWILIO_ACCOUNT_SID'],
