@@ -3,6 +3,7 @@ now = datetime.now()
 
 print("got here")
 if now.weekday() == 6 and now.hour == 16:
+    ("and here")
     from app.schedule.next_and_prev_game import NextGame
     from flask import current_app as app
     from app.auth.models.user import User
