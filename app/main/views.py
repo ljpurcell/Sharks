@@ -25,6 +25,7 @@ def votes():
 @main.route('/rsvp/<token>', methods=['GET', 'POST'])
 @login_required
 def rsvp(token: str):
+    availability = request.form.get('availability')
     response: str = current_user.confirm_rsvp_token(token)
     id, date = response.split(',')
     id = int(id)
@@ -37,6 +38,7 @@ def rsvp(token: str):
         rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = date
         rsvp.user_id = id
+        rsvp.is_playing = availability
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
