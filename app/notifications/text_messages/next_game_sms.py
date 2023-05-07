@@ -2,7 +2,7 @@ from datetime import datetime
 now = datetime.now()
 
 # Sunday (0) at 12pm (1 UTC)
-if now.weekday() == 6 and now.hour == 7:
+if now.weekday() == 6 and now.hour == 1:
     from app.schedule.next_and_prev_game import NextGame
     from app.auth.models.user import User
     from twilio.rest import Client
@@ -29,10 +29,11 @@ if now.weekday() == 6 and now.hour == 7:
                         app.config['TWILIO_AUTH_TOKEN'])
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
-
+        
         for team_member in team_members:
-            message = client.messages.create(
-                body=generate_message_body(NextGame, team_member),
-                from_=app.config['TWILIO_PHONE_NUMBER'],
-                to=team_member.mobile
-            )
+            if team_member.username == "Lyndon":    
+                message = client.messages.create(
+                    body=generate_message_body(NextGame, team_member),
+                    from_=app.config['TWILIO_PHONE_NUMBER'],
+                    to=team_member.mobile
+                )

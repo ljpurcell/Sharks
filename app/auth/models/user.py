@@ -117,7 +117,7 @@ class User(db.Model, UserMixin):
 
     def generate_rsvp_token(self, date_str: str) -> str:
         serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        details: tuple[int|str, str] = (self.id, date_str)
+        details: str = str(self.id) + "," + date_str
         return app.config['APP_URL'] + '/rsvp/' + serializer.dumps(details, salt="rsvp-token")
         
     def confirm_rsvp_token(self, token: str, expiration: int = 86400) -> str | Exception:

@@ -26,15 +26,17 @@ def votes():
 @login_required
 def rsvp(token: str):
     response: str = current_user.confirm_rsvp_token(token)
+    id, date = response.split(',')
+    id = int(id)
 
-    if request.method == 'GET' and response == (current_user.id, NextGame.date_str):
+    if (request.method == 'GET') and (current_user.id == id) and (NextGame.date_str == date):
         flash('Token valid. Please confirm whether or not you are playing!', 'success')
         return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     
-    elif request.method == 'POST' and response == (current_user.id, NextGame.date_str):
+    elif request.method == 'POST' and (current_user.id == id) and (NextGame.date_str == date):
         rsvp: GameRSVP = GameRSVP()
-        rsvp.game_date = response[1]
-        rsvp.user_id = response[0]
+        rsvp.game_date = date
+        rsvp.user_id = id
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
