@@ -25,6 +25,7 @@ def votes():
 @main.route('/rsvp/<token>', methods=['GET', 'POST'])
 @login_required
 def rsvp(token: str):
+    print(request)
     availability = request.form.get('availability')
     response: str = current_user.confirm_rsvp_token(token)
     id, date = response.split(',')
