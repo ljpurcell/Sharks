@@ -1,5 +1,8 @@
+from datetime import datetime
+now = datetime.now()
 
-def send():
+# Tuesday (1) at 11am (1 UTC)
+if now.weekday() == 1 and now.hour == 1:
     from flask import current_app as app
     from twilio.rest import Client
     from os import environ as env

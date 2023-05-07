@@ -1,20 +1,14 @@
 from datetime import datetime
 now = datetime.now()
 
-print("got here")
-if now.weekday() == 6 and now.hour == 6:
-    ("and here")
+# Sunday (0) at 12pm (1 UTC)
+if now.weekday() == 6 and now.hour == 2:
     from app.schedule.next_and_prev_game import NextGame
     from flask import current_app as app
     from app.auth.models.user import User
     from twilio.rest import Client
     from app import db
     from app.schedule.game import Game
-
-
-    client = Client(app.config['TWILIO_ACCOUNT_SID'],
-                    app.config['TWILIO_AUTH_TOKEN'])
-
 
     def generate_message_body(next_game: Game, user: User) -> str:
         if next_game is None:
@@ -29,12 +23,15 @@ if now.weekday() == 6 and now.hour == 6:
                 user.generate_rsvp_token(next_game.date_str)
         return message_body
 
+    with app.app_context():
+        client = Client(app.config['TWILIO_ACCOUNT_SID'],
+                        app.config['TWILIO_AUTH_TOKEN'])
 
-    team_members: list[User] = db.session.scalars(db.select(User)).all()
+        team_members: list[User] = db.session.scalars(db.select(User)).all()
 
-    for team_member in team_members:
-        message = client.messages.create(
-            body=generate_message_body(NextGame, team_member),
-            from_=app.config['TWILIO_PHONE_NUMBER'],
-            to=team_member.mobile
-        )
+        for team_member in team_members:
+            message = client.messages.create(
+                body=generate_message_body(NextGame, team_member),
+                from_=app.config['TWILIO_PHONE_NUMBER'],
+                to=team_member.mobile
+            )
