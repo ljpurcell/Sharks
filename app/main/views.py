@@ -34,7 +34,10 @@ def rsvp(token: str):
         return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     
     elif request.method == 'POST' and (current_user.id == id) and (NextGame.date_str == date):
-        data = request.get_json()
+        data = request.get_json() if request.is_json else None
+        if not data:
+            raise ValueError('No JSON data in POST request')
+        print(data['availability'])
         availability = data['availability']
         rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = date
