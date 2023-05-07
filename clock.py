@@ -3,7 +3,7 @@ from app.notifications.text_messages import next_game_sms, votes_sms, whose_play
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', day_of_week='sun', hour=14)
+@sched.scheduled_job('cron', day_of_week='sun', hour=15)
 def next_game_text_job():
     next_game_sms.send()
 
