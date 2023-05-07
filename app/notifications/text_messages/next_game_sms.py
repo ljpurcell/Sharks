@@ -31,9 +31,8 @@ if now.weekday() == 6 and now.hour == 7:
         team_members: list[User] = db.session.scalars(db.select(User)).all()
         
         for team_member in team_members:
-            if team_member.username == "Lyndon":    
-                message = client.messages.create(
-                    body=generate_message_body(NextGame, team_member),
-                    from_=app.config['TWILIO_PHONE_NUMBER'],
-                    to=team_member.mobile
-                )
+            message = client.messages.create(
+                body=generate_message_body(NextGame, team_member),
+                from_=app.config['TWILIO_PHONE_NUMBER'],
+                to=team_member.mobile
+            )
