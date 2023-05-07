@@ -1,5 +1,6 @@
 from flask import flash, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+import logging
 from . import main
 from ..auth.models.user import User, GameRSVP
 from app.schedule.next_and_prev_game import NextGame, PrevGame
@@ -34,10 +35,13 @@ def rsvp(token: str):
         return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     
     elif request.method == 'POST' and (current_user.id == id) and (NextGame.date_str == date):
+        logging.debug('Request: ' + request)
+        logging.debug('Request is_json: ' + request.is_json)
+        logging.debug('Request get_json(): ' + request.get_json())
+        logging.debug('Request json(): ' + request.json())
         data = request.get_json() if request.is_json else None
         if not data:
             raise ValueError('No JSON data in POST request')
-        print(data['availability'])
         availability = data['availability']
         rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = date
