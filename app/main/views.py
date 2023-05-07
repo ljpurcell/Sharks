@@ -25,9 +25,6 @@ def votes():
 @main.route('/rsvp/<token>', methods=['GET', 'POST'])
 @login_required
 def rsvp(token: str):
-    data = request.json
-    print(data)
-    availability = data.get('availability')
     response: str = current_user.confirm_rsvp_token(token)
     id, date = response.split(',')
     id = int(id)
@@ -37,6 +34,8 @@ def rsvp(token: str):
         return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     
     elif request.method == 'POST' and (current_user.id == id) and (NextGame.date_str == date):
+        data = request.get_json()
+        availability = data['availability']
         rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = date
         rsvp.user_id = id
