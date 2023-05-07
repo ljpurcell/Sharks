@@ -2,7 +2,7 @@ from datetime import datetime
 now = datetime.now()
 
 # Sunday (0) at 12pm (1 UTC)
-if now.weekday() == 6 and now.hour == 2:
+if now.weekday() == 6 and now.hour == 7:
     from app.schedule.next_and_prev_game import NextGame
     from flask import current_app as app
     from app.auth.models.user import User
