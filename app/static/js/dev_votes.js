@@ -1,6 +1,6 @@
 "use strict";
 
-function submitVotes(seasonString, rndString, dateString) {
+function submitVotes(seasonString, rndString, dateString, csrf_token) {
   const playerOptions = [
     document.getElementById("playerMenu1").value,
     document.getElementById("playerMenu2").value,
@@ -23,7 +23,7 @@ function submitVotes(seasonString, rndString, dateString) {
       assignedVotes: validatedVotes.votes,
     };
     try {
-      postVotesToApi(voteAssignments);
+      postVotesToApi(voteAssignments, csrf_token);
     } catch (error) {
       console.log(error);
     }
@@ -90,13 +90,14 @@ function votesValidator(players, votes) {
   }
 }
 
-async function postVotesToApi(votes) {
+async function postVotesToApi(votes, csrf_token) {
   const response = await fetch("/record-votes", {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrf_token
     },
     body: JSON.stringify(votes),
   });
