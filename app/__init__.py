@@ -21,7 +21,7 @@ def create_app(config_type: str="development"):
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    csrf = CSRFProtect(app)
+    # csrf = CSRFProtect(app)
 
 
     with app.app_context():
