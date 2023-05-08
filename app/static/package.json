@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sweetalert2": "^11.7.3",
-    "typescript": "^5.0.2"
+    "sweetalert2": "^11.7.3"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
