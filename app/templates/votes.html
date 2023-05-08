@@ -28,7 +28,7 @@ page_content %}
 </div>
 
 <form class="p-24 mx-auto space-y-8">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
   <div class="flex justify-between">
     <div class="">
       <label for="player">Player</label>

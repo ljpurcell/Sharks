@@ -91,7 +91,7 @@ function votesValidator(players, votes) {
 }
 
 async function postVotesToApi(votes) {
-  const csrf_token = document.getElementsByName('csrf_token').value;
+  const csrf_token = document.getElementById('csrf_token').value;
   
   const response = await fetch("/record-votes", {
     method: "POST",
