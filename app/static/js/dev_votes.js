@@ -23,7 +23,7 @@ function submitVotes(seasonString, rndString, dateString) {
       assignedVotes: validatedVotes.votes,
     };
     try {
-      postVotesToApi(voteAssignments, csrf_token);
+      postVotesToApi(voteAssignments);
     } catch (error) {
       console.log(error);
     }
