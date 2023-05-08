@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sweetalert2": "^11.7.3"
+    "sweetalert2": "^11.7.5"
   },
   "engines": {
     "node": "18.x"
