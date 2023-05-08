@@ -4,6 +4,7 @@ from . import main
 from ..auth.models.user import User, GameRSVP, VoteAssignment
 from app.schedule.next_and_prev_game import NextGame, PrevGame
 from app import db
+import json
 
 
 @main.route('/')
