@@ -1,6 +1,6 @@
 "use strict";
 
-function submitVotes(seasonString, rndString, dateString, csrf_token) {
+function submitVotes(seasonString, rndString, dateString) {
   const playerOptions = [
     document.getElementById("playerMenu1").value,
     document.getElementById("playerMenu2").value,
@@ -90,7 +90,8 @@ function votesValidator(players, votes) {
   }
 }
 
-async function postVotesToApi(votes, csrf_token) {
+async function postVotesToApi(votes) {
+  const csrf_token = '{{ csrf_token() }}';
   const response = await fetch("/record-votes", {
     method: "POST",
     mode: "cors",
