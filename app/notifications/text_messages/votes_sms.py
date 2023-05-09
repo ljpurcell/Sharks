@@ -16,7 +16,7 @@ if now.weekday() == 1 and now.hour == 1:
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
 
-        message_body: str = "Get those votes in!\n\n" + str(env.get("APP_URL")) + "/votes"
+        message_body: str = "Get those votes in!\n\n" + app.config['APP_URL'] + "/votes"
 
         if not PrevGame.is_bye:
             for team_member in team_members:
