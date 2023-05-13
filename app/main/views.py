@@ -60,13 +60,14 @@ def rsvp_get(round_num: str):
         rsvp: GameRSVP = GameRSVP()
         rsvp.game_date = NextGame.date_str
         rsvp.user_id = current_user.id
-        rsvp.is_playing = form.availability.data
+        player_response = form.availability.data == 'True'
+        rsvp.is_playing = player_response
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
         return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
      else:
-        flash('RSVP link invalid or expired', 'error')
+        flash('RSVP link invalid or expired. Either you have already responded or this game has been played!', 'error')
         return redirect(url_for('main.index'))
 
 
