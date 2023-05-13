@@ -1,8 +1,7 @@
 {% extends "base.html" %} {% block scripts %}
-<script
-  type="text/javascript"
-  src="{{ url_for('static', filename='node_modules/sweetalert2/dist/sweetalert2.all.min.js') }}"
-></script>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
+"></script>
 
 <script
   type="text/javascript"
@@ -23,7 +22,7 @@ page_content %}
   </div>
 </div>
 
-<form class="p-24 mx-auto space-y-8" action="" method="post">  
+<form class="p-24 mx-auto space-y-8">  
   <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
   <div class="flex justify-between">
     <div class="">
