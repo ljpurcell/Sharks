@@ -31,11 +31,11 @@ page_content %}
 <form method="POST" autocomplete="off" class="space-y-4">
   {{ form.csrf_token }} 
   <div class="flex">
-  {{ form.availability(class_="mx-auto") }} 
+  {{ form.availability(class_="mx-auto", value=rsvp.is_playing) }} 
   </div>
   <div>  
       <button class="flex mt-4 bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200">
-        {{ form.submit(class_="hover:cursorpointer"), value=rsvp.is_playing }}
+        {{ form.submit(class_="hover:cursorpointer")  }}
       </button>
   </div>
 </form>
