@@ -50,16 +50,22 @@ def record_votes():
 @main.route('/rsvp/<round_num>', methods=['GET', 'POST'])
 @login_required
 def rsvp_get(round_num: str):
-    #  Need to check if user has already RSVP'd for this round
-     form = RSVPForm()
-     next_round = NextGame.round
-     round_text, next_round_num = next_round.split(' ')
-     
-     if request.method == 'GET' and next_round_num == round_num:
-        return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form)
-     elif form.validate_on_submit():
-        rsvp: GameRSVP = GameRSVP()
-        day, date = NextGame.date_str.split(' ')
+    form: RSVPForm = RSVPForm()
+
+    round_text, next_round_num = NextGame.round.split(' ') # round_text = "Round", next_round_num =  "4"
+    day, date = NextGame.date_str.split(' ')               # day = "Monday", date = "15/MAY/23"
+
+    rsvp_to_this_round = db.session.scalar(db.select(GameRSVP).filter_by(user_id=current_user.id, game_date=date)).first() 
+    if rsvp_to_this_round:
+        prev_response = "PLAYING" if rsvp_to_this_round.is_playing else "NOT PLAYING"
+        flash('You have already provided a response. Please be aware you are now updating your previous answer.', 'error')
+        return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form, rsvp=rsvp_to_this_round, prev_response=prev_response)
+    
+    rsvp: GameRSVP = GameRSVP()
+    
+    if request.method == 'GET' and next_round_num == round_num:
+        return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form, rsvp=rsvp)
+    elif form.validate_on_submit():
         rsvp.game_date = date
         rsvp.user_id = current_user.id
         player_response = form.availability.data == 'True'
@@ -68,8 +74,8 @@ def rsvp_get(round_num: str):
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
         return redirect(url_for('main.index'))
-     else:
-        flash('RSVP link invalid or expired. Either you have already responded or this game has been played!', 'error')
+    else:
+        flash('RSVP link invalid or expired. Are you sure this game has not already been played?', 'error')
         return redirect(url_for('main.index'))
 
 

@@ -22,6 +22,12 @@ page_content %}
   </div>
 </div>
 
+{% if prev_response %}
+<div>
+  You previously said you were {{ prev_response }}
+</div>
+{% endif %}
+
 <form method="POST" autocomplete="off" class="space-y-4">
   {{ form.csrf_token }} 
   <div class="flex">
@@ -29,7 +35,7 @@ page_content %}
   </div>
   <div>  
       <button class="flex mt-4 bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200">
-        {{ form.submit(class_="hover:cursorpointer")}}
+        {{ form.submit(class_="hover:cursorpointer"), value=rsvp.is_playing }}
       </button>
   </div>
 </form>
