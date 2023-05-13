@@ -20,13 +20,12 @@ page_content %}
       <li>{{ next_game.teams }}</li>
     </ul>
   </div>
+  {% if prev_response %}
+  <div class="font-bold mt-4">
+    You previously said you were {{ prev_response }}
+  </div>
+  {% endif %}
 </div>
-
-{% if prev_response %}
-<div class="flex mx-auto font-bold mt-4">
-  You previously said you were {{ prev_response }}
-</div>
-{% endif %}
 
 <form method="POST" autocomplete="off" class="space-y-4">
   {{ form.csrf_token }} 
