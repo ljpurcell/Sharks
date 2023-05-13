@@ -49,14 +49,14 @@ def record_votes():
 @main.route('/rsvp/<round_num>', methods=['GET'])
 @login_required
 def rsvp_get(round_num: str):
-    next_round_num, round_date = NextGame.round.split(' ')
-
-    if next_round_num == round_num:
+     next_round = NextGame.round
+     round_text, next_round_num = next_round.split(' ')
+     
+     if next_round_num == round_num:
         return render_template('rsvp.html', user=current_user, next_game=NextGame)
-    else:
+     else:
         flash('RSVP link invalid or expired', 'error')
-        
-    return redirect(url_for('main.index'))
+        return redirect(url_for('main.index'))
 
 
 @main.route('/my-availability', methods=['POST'])
