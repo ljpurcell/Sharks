@@ -50,7 +50,7 @@ def record_votes():
 @main.route('/rsvp/<round_num>', methods=['GET', 'POST'])
 @login_required
 def rsvp_get(round_num: str):
-     form = RSVPForm
+     form = RSVPForm()
      next_round = NextGame.round
      round_text, next_round_num = next_round.split(' ')
      
