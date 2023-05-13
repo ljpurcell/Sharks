@@ -63,6 +63,7 @@ def rsvp_get(round_num: str):
     elif rsvp_to_this_round and form.validate_on_submit():
         player_response = True if form.availability.data == 'True' else False
         rsvp_to_this_round.is_playing = player_response
+        db.session.commit()
         flash('Thank you for updating your RSVP!', 'success')
         return redirect(url_for('main.index'))
 
