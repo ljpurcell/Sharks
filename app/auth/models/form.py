@@ -13,6 +13,11 @@ class LoginForm(FlaskForm):
     submit: SubmitField = SubmitField('Log in!')
 
 
+class RSVPForm(FlaskForm):
+    availability: SelectField = SelectField(validators=[InputRequired()], choices=[(True, 'PLAYING'), (False, 'NOT PLAYING')])
+    submit: SubmitField = SubmitField('Submit!')
+
+
 class UserDetailsForm(FlaskForm):
     username: StringField = StringField(validators=[InputRequired(), Length(min=4,max=30)])
     password: PasswordField = PasswordField(validators=[InputRequired(), Length(min=4,max=30)])

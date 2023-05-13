@@ -2,6 +2,7 @@ from flask import flash, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from . import main
 from ..auth.models.user import User, GameRSVP, VoteAssignment
+from ..auth.models.form import RSVPForm
 from app.schedule.next_and_prev_game import NextGame, PrevGame
 from app import db
 import json
@@ -46,14 +47,24 @@ def record_votes():
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
 
 
-@main.route('/rsvp/<round_num>', methods=['GET'])
+@main.route('/rsvp/<round_num>', methods=['GET', 'POST'])
 @login_required
 def rsvp_get(round_num: str):
+     form = RSVPForm
      next_round = NextGame.round
      round_text, next_round_num = next_round.split(' ')
      
-     if next_round_num == round_num:
-        return render_template('rsvp.html', user=current_user, next_game=NextGame)
+     if request.method == 'GET' and next_round_num == round_num:
+        return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form)
+     elif form.validate_on_submit():
+        rsvp: GameRSVP = GameRSVP()
+        rsvp.game_date = NextGame.date_str
+        rsvp.user_id = current_user.id
+        rsvp.is_playing = form.availability.data
+        db.session.add(rsvp)
+        db.session.commit()
+        flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
+        return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
      else:
         flash('RSVP link invalid or expired', 'error')
         return redirect(url_for('main.index'))
@@ -65,12 +76,6 @@ def rsvp_post():
     data = request.get_json() if request.is_json else None
     if not data:
         raise ValueError('No JSON data in POST request')
-    rsvp: GameRSVP = GameRSVP()
-    rsvp.game_date = data['game_date']
-    rsvp.user_id = current_user.id
-    rsvp.is_playing = data['availability']
-    db.session.add(rsvp)
-    db.session.commit()
-    flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
+    
 
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
