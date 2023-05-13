@@ -22,7 +22,7 @@ page_content %}
   </div>
 </div>
 
-<form class="p-24 mx-auto space-y-8">  
+<div class="p-24 mx-auto space-y-8">  
   <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
   <div class="flex justify-between">
     <div class="">
@@ -33,7 +33,7 @@ page_content %}
         <option>NOT PLAYING</option>
       </select>
     </div>
-    <div>
+  <div>
   <button
     class="flex bg-blue-300 border-2 border-blue-400 p-2 rounded mx-auto hover:bg-blue-200"
     onclick="submitAvailability('{{user}}')"
@@ -41,7 +41,7 @@ page_content %}
     Submit availability
   </button>
 </div>
-</form>
+
 
 
 
