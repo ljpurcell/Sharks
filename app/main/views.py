@@ -46,13 +46,12 @@ def record_votes():
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
 
 
-@main.route('/rsvp/<date_string>', methods=['GET'])
+@main.route('/rsvp/<round_hyphen_season_id>', methods=['GET'])
 @login_required
-def rsvp_get(date_string: str):
-    response: str = current_user.confirm_rsvp_token(token)
+def rsvp_get(round_hyphen_season_id: str):
+    round, ssn_id = round_hyphen_season_id.split('-')
 
-
-    if NextGame.date_str == date_string:
+    if NextGame.round == round:
         return render_template('rsvp.html', user=current_user, next_game=NextGame)
     else:
         flash('RSVP link invalid or expired', 'error')

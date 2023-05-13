@@ -18,9 +18,10 @@ if (now.weekday() == 6 and now.hour == 22) or now.weekday() == 5:
             message_body = next_game.round + " - " + \
                 next_game.date_str + "\n\n" + next_game.teams
         else:
+            round_num, round_date = next_game.round.split(' ')
             message_body = next_game.round + " - " + next_game.date_str + "\n\n" + next_game.teams + "\n\n" + next_game.time_str + \
                 " at " + next_game.location + \
-                ".\n\nClick this link to RSVP: " + app.config['APP_URL'] + "/rsvp/" + next_game.round + "-" + next_game.season_id
+                ".\n\nClick this link to RSVP: " + app.config['APP_URL'] + "/rsvp/" + round_num + "-" + next_game.season_id
         return message_body
 
     with app.app_context():
