@@ -53,8 +53,7 @@ def rsvp(token: str):
     id, date = response.split(',')
     id = int(id)
 
-    from time import sleep
-    sleep(120)
+    print(request.method)
 
     if (request.method == 'POST') and (current_user.id == id) and (NextGame.date_str == date):
         data = request.get_json() if request.is_json else None

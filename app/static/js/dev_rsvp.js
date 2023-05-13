@@ -29,7 +29,7 @@ async function postAvailabilityToApi(user, token_endpoint, is_playing) {
     }),
   });
 
-  if (response.status == 200) {
+  if (response) {
     Swal.fire({
       icon: "success",
       title: "Nice!",
