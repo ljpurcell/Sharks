@@ -1,21 +1,21 @@
 "use strict";
 
-function submitAvailability(player, rsvp_token) {
+function submitAvailability(player) {
   const response = document.getElementById("player_availability").value;
 
   const is_playing = response === "PLAYING";
 
   try {
-    postAvailabilityToApi(player, rsvp_token, is_playing);
+    postAvailabilityToApi(player, is_playing);
   } catch (error) {
     console.log(error);
   }
 }
 
-async function postAvailabilityToApi(user, token_endpoint, is_playing) {
+async function postAvailabilityToApi(user, is_playing) {
   const csrf_token = document.getElementById('csrf_token').value;
 
-  const response = await fetch("/rsvp/" + token_endpoint, {
+  const response = await fetch("/my-availability", {
     method: "POST",
     mode: "cors",
     cache: "no-cache",

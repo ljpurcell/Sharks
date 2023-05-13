@@ -46,7 +46,7 @@ def record_votes():
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
 
 
-@main.get('/rsvp/<token>')
+@main.route('/rsvp/<token>', methods=['GET'])
 @login_required
 def rsvp_get(token: str):
     response: str = current_user.confirm_rsvp_token(token)
@@ -62,7 +62,7 @@ def rsvp_get(token: str):
     return redirect(url_for('main.index'))
 
 
-@main.post('/rsvp/<token>')
+@main.route('/my-availability', methods=['POST'])
 @login_required
 def rsvp_post(token: str):
     response: str = current_user.confirm_rsvp_token(token)
@@ -81,6 +81,5 @@ def rsvp_post(token: str):
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
-    from time import sleep
-    sleep(120)
+
     return redirect(url_for('main.index'))
