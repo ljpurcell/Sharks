@@ -22,7 +22,7 @@ page_content %}
   </div>
 </div>
 
-<div class="p-24 mx-auto space-y-8">  
+<form onsubmit="return false" class="p-24 mx-auto space-y-8">  
   <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
   <div class="flex justify-between">
     <div class="">
@@ -40,7 +40,7 @@ page_content %}
   >
     Submit availability
   </button>
-</div>
+</form>
 
 
 
