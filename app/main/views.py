@@ -55,7 +55,7 @@ def rsvp_get(round_num: str):
     round_text, next_round_num = NextGame.round.split(' ') # round_text = "Round", next_round_num =  "4"
     day, date = NextGame.date_str.split(' ')               # day = "Monday", date = "15/MAY/23"
 
-    rsvp_to_this_round = db.session.scalar(db.select(GameRSVP).filter_by(user_id=current_user.id, game_date=date)).first() 
+    rsvp_to_this_round = db.session.scalars(db.select(GameRSVP).filter_by(user_id=current_user.id, game_date=date)).first() 
     if rsvp_to_this_round:
         prev_response = "PLAYING" if rsvp_to_this_round.is_playing else "NOT PLAYING"
         flash('You have already provided a response. Please be aware you are now updating your previous answer.', 'error')
