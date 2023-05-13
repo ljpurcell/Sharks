@@ -46,16 +46,30 @@ def record_votes():
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
 
 
-@main.route('/rsvp/<token>', methods=['GET', 'POST'])
+@main.get('/rsvp/<token>')
 @login_required
-def rsvp(token: str):
+def rsvp_get(token: str):
     response: str = current_user.confirm_rsvp_token(token)
     id, date = response.split(',')
     id = int(id)
 
-    print(request.method)
+    if current_user.id == id and NextGame.date_str == date:
+        flash('Token valid. Please confirm whether or not you are playing!', 'success')
+        return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
+    else:
+        flash('RSVP link invalid or expired', 'error')
+        
+    return redirect(url_for('main.index'))
 
-    if (request.method == 'POST') and (current_user.id == id) and (NextGame.date_str == date):
+
+@main.post('/rsvp/<token>')
+@login_required
+def rsvp_post(token: str):
+    response: str = current_user.confirm_rsvp_token(token)
+    id, date = response.split(',')
+    id = int(id)
+
+    if current_user.id == id and NextGame.date_str == date:
         data = request.get_json() if request.is_json else None
         if not data:
             raise ValueError('No JSON data in POST request')
@@ -67,11 +81,6 @@ def rsvp(token: str):
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
-    elif (request.method == 'GET') and (current_user.id == id) and (NextGame.date_str == date):
-        flash('Token valid. Please confirm whether or not you are playing!', 'success')
-        return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
-    else:
-        flash('RSVP link invalid or expired', 'error')
-        
+    from time import sleep
+    sleep(120)
     return redirect(url_for('main.index'))
-
