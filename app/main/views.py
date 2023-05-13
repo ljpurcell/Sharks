@@ -56,11 +56,16 @@ def rsvp_get(round_num: str):
     day, date = NextGame.date_str.split(' ')               # day = "Monday", date = "15/MAY/23"
 
     rsvp_to_this_round = db.session.scalars(db.select(GameRSVP).filter_by(user_id=current_user.id, game_date=date)).first() 
-    if rsvp_to_this_round:
+    if rsvp_to_this_round and request.method == 'GET':
         prev_response = "PLAYING" if rsvp_to_this_round.is_playing else "NOT PLAYING"
         flash('You have already provided a response. Please be aware you are now updating your previous answer.', 'error')
         return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form, rsvp=rsvp_to_this_round, prev_response=prev_response)
-    
+    elif rsvp_to_this_round and form.validate_on_submit():
+        player_response = True if form.availability.data == 'True' else False
+        rsvp_to_this_round.is_playing = player_response
+        flash('Thank you for updating your RSVP!', 'success')
+        return redirect(url_for('main.index'))
+
     rsvp: GameRSVP = GameRSVP()
     
     if request.method == 'GET' and next_round_num == round_num:
@@ -68,7 +73,7 @@ def rsvp_get(round_num: str):
     elif form.validate_on_submit():
         rsvp.game_date = date
         rsvp.user_id = current_user.id
-        player_response = form.availability.data == 'True'
+        player_response = True if form.availability.data == 'True' else False
         rsvp.is_playing = player_response
         db.session.add(rsvp)
         db.session.commit()
