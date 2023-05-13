@@ -50,6 +50,7 @@ def record_votes():
 @main.route('/rsvp/<round_num>', methods=['GET', 'POST'])
 @login_required
 def rsvp_get(round_num: str):
+    #  Need to check if user has already RSVP'd for this round
      form = RSVPForm()
      next_round = NextGame.round
      round_text, next_round_num = next_round.split(' ')
@@ -66,7 +67,7 @@ def rsvp_get(round_num: str):
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
-        return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
+        return redirect(url_for('main.index'))
      else:
         flash('RSVP link invalid or expired. Either you have already responded or this game has been played!', 'error')
         return redirect(url_for('main.index'))
