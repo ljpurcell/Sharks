@@ -73,4 +73,4 @@ def rsvp_post():
     db.session.commit()
     flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
 
-    return redirect(url_for('main.index'))
+    return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
