@@ -51,7 +51,7 @@ def record_votes():
 def rsvp_get(round_num: str):
     next_round_num, round_date = NextGame.round.split(' ')
 
-    if NextGame.round == round_num:
+    if next_round_num == round_num:
         return render_template('rsvp.html', user=current_user, next_game=NextGame)
     else:
         flash('RSVP link invalid or expired', 'error')
