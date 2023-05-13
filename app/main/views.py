@@ -53,11 +53,7 @@ def rsvp(token: str):
     id, date = response.split(',')
     id = int(id)
 
-    if (request.method == 'GET') and (current_user.id == id) and (NextGame.date_str == date):
-        flash('Token valid. Please confirm whether or not you are playing!', 'success')
-        return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
-    
-    elif request.method == 'POST' and (current_user.id == id) and (NextGame.date_str == date):
+    if (request.method == 'POST') and (current_user.id == id) and (NextGame.date_str == date):
         data = request.get_json() if request.is_json else None
         if not data:
             raise ValueError('No JSON data in POST request')
@@ -69,7 +65,9 @@ def rsvp(token: str):
         db.session.add(rsvp)
         db.session.commit()
         flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
-
+    elif (request.method == 'GET') and (current_user.id == id) and (NextGame.date_str == date):
+        flash('Token valid. Please confirm whether or not you are playing!', 'success')
+        return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
     else:
         flash('RSVP link invalid or expired', 'error')
         
