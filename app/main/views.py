@@ -58,7 +58,8 @@ def rsvp_get(round_num: str):
         return render_template('rsvp.html', user=current_user, next_game=NextGame, form=form)
      elif form.validate_on_submit():
         rsvp: GameRSVP = GameRSVP()
-        rsvp.game_date = NextGame.date_str
+        day, date = NextGame.date_str.split(' ')
+        rsvp.game_date = date
         rsvp.user_id = current_user.id
         player_response = form.availability.data == 'True'
         rsvp.is_playing = player_response
