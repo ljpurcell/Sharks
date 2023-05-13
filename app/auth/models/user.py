@@ -114,18 +114,5 @@ class User(db.Model, UserMixin):
             return mobile
         except Exception as err:
             return err
-
-    def generate_rsvp_token(self, date_str: str) -> str:
-        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        details: str = str(self.id) + "," + date_str
-        return app.config['APP_URL'] + '/rsvp/' + serializer.dumps(details, salt="rsvp-token")
-        
-    def confirm_rsvp_token(self, token: str, expiration: int = 86400) -> str | Exception:
-        serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        try:
-            response: str = serializer.loads(token, salt="rsvp-token", max_age=expiration)
-            return response
-        except Exception as err:
-            return err
         
 

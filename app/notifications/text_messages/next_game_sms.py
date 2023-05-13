@@ -9,7 +9,9 @@ if (now.weekday() == 6 and now.hour == 22) or now.weekday() == 5:
     from app import db, create_app
     from app.schedule.game import Game
 
-    def generate_message_body(next_game: Game, user: User) -> str:
+    app = create_app("production")
+
+    def generate_message_body(next_game: Game, user: User, app) -> str:
         if next_game is None:
             message_body = "Well done on the season -- thanks for being a part of this cut-throat unit... Got the whole world is looking like shark bait at the minute!\n\nBe sure to rest up and hit the practice court in the off-season.\n\nStay tuned for Sharks Brownlow."
         elif next_game.is_bye:
@@ -18,11 +20,8 @@ if (now.weekday() == 6 and now.hour == 22) or now.weekday() == 5:
         else:
             message_body = next_game.round + " - " + next_game.date_str + "\n\n" + next_game.teams + "\n\n" + next_game.time_str + \
                 " at " + next_game.location + \
-                ".\n\nClick this link (24H only) to RSVP: " + \
-                user.generate_rsvp_token(next_game.date_str)
+                ".\n\nClick this link to RSVP: " + app.config['APP_URL'] + "/rsvp/" + next_game.date_str
         return message_body
-    
-    app = create_app("production")
 
     with app.app_context():
         client = Client(app.config['TWILIO_ACCOUNT_SID'],
@@ -33,7 +32,7 @@ if (now.weekday() == 6 and now.hour == 22) or now.weekday() == 5:
         for team_member in team_members:
             if team_member.username == "Lyndon":
                 message = client.messages.create(
-                    body=generate_message_body(NextGame, team_member),
+                    body=generate_message_body(NextGame, team_member, app),
                     from_=app.config['TWILIO_PHONE_NUMBER'],
                     to=team_member.mobile
                 )

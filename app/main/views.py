@@ -46,16 +46,14 @@ def record_votes():
     return json.dumps({'redirect':True, 'redirectUrl': url_for('main.index')}), 302, {'ContentType':'application/json'}
 
 
-@main.route('/rsvp/<token>', methods=['GET'])
+@main.route('/rsvp/<date_string>', methods=['GET'])
 @login_required
-def rsvp_get(token: str):
+def rsvp_get(date_string: str):
     response: str = current_user.confirm_rsvp_token(token)
-    id, date = response.split(',')
-    id = int(id)
 
-    if current_user.id == id and NextGame.date_str == date:
-        flash('Token valid. Please confirm whether or not you are playing!', 'success')
-        return render_template('rsvp.html', user=current_user, token=token, next_game=NextGame)
+
+    if NextGame.date_str == date_string:
+        return render_template('rsvp.html', user=current_user, next_game=NextGame)
     else:
         flash('RSVP link invalid or expired', 'error')
         
@@ -64,22 +62,16 @@ def rsvp_get(token: str):
 
 @main.route('/my-availability', methods=['POST'])
 @login_required
-def rsvp_post(token: str):
-    response: str = current_user.confirm_rsvp_token(token)
-    id, date = response.split(',')
-    id = int(id)
-
-    if current_user.id == id and NextGame.date_str == date:
-        data = request.get_json() if request.is_json else None
-        if not data:
-            raise ValueError('No JSON data in POST request')
-        availability = data['availability']
-        rsvp: GameRSVP = GameRSVP()
-        rsvp.game_date = date
-        rsvp.user_id = id
-        rsvp.is_playing = availability
-        db.session.add(rsvp)
-        db.session.commit()
-        flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
+def rsvp_post():
+    data = request.get_json() if request.is_json else None
+    if not data:
+        raise ValueError('No JSON data in POST request')
+    rsvp: GameRSVP = GameRSVP()
+    rsvp.game_date = data['game_date']
+    rsvp.user_id = current_user.id
+    rsvp.is_playing = data['availability']
+    db.session.add(rsvp)
+    db.session.commit()
+    flash('Thanks for RSVPing -- your team mates appreciate it!', 'success')
 
     return redirect(url_for('main.index'))

@@ -1,18 +1,18 @@
 "use strict";
 
-function submitAvailability(player) {
+function submitAvailability(player, date_string) {
   const response = document.getElementById("player_availability").value;
 
   const is_playing = response === "PLAYING";
 
   try {
-    postAvailabilityToApi(player, is_playing);
+    postAvailabilityToApi(player, date_string, is_playing);
   } catch (error) {
     console.log(error);
   }
 }
 
-async function postAvailabilityToApi(user, is_playing) {
+async function postAvailabilityToApi(user, date_string, is_playing) {
   const csrf_token = document.getElementById('csrf_token').value;
 
   const response = await fetch("/my-availability", {
@@ -24,6 +24,7 @@ async function postAvailabilityToApi(user, is_playing) {
       "X-CSRFToken": csrf_token
     },
     body: JSON.stringify({
+      game_date: date_string,
       player: user,
       availability: is_playing,
     }),
