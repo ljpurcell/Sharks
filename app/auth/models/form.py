@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
 
 
 class RSVPForm(FlaskForm):
-    availability: SelectField = SelectField(validators=[InputRequired()], choices=[(True, 'PLAYING'), (False, 'NOT PLAYING')])
+    availability: SelectField = SelectField(validators=[InputRequired()], choices=[('True', 'PLAYING'), ('False', 'NOT PLAYING')])
     submit: SubmitField = SubmitField('Submit!')
 
 
