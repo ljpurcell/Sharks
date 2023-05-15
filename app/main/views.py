@@ -23,6 +23,7 @@ def votes():
     team: list[User] = db.session.scalars(db.select(User)).all()
     return render_template('votes.html', prev_game=PrevGame, team=team, user=current_user)
 
+
 @main.route('/record-votes', methods=['POST'])
 @login_required
 def record_votes():
