@@ -18,11 +18,11 @@ if now.weekday() == 6 and now.hour == 7 or True:
         team_members: list[User] = db.session.scalars(db.select(User)).all()
 
         confirmed_playing: list[User] = db.session.scalars(
-            db.select(GameRSVP).filter_by(date_str=NextGame.date_str, is_playing=True))
+            db.select(GameRSVP).filter_by(date_str=NextGame.date_str, is_playing=True)).all()
     
 
         confirmed_out: list[User] = db.session.scalars(db.select(GameRSVP).filter_by(
-            date_str=NextGame.date_str, is_playing=False))
+            date_str=NextGame.date_str, is_playing=False)).all()
 
         message_body: str = "Playing: " + json.dumps(confirmed_playing) + \
             "\n\nNot playing: " + json.dumps(confirmed_out)
