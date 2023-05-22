@@ -16,8 +16,8 @@ if now.weekday() == 6 and now.hour == 7 or True:
             app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
-        confirmed_playing: list[User] = db.session.scalars(
-            db.select(GameRSVP)).filter_by(date_str=NextGame.date_str, is_playing=True)
+        confirmed_playing: list[User] = db.session.execute(
+            db.select(GameRSVP).filter_by(date_str=NextGame.date_str, is_playing=True)).scalars()
         confirmed_out: list[User] = db.session.scalars(db.select(GameRSVP)).filter_by(
             date_str=NextGame.date_str, is_playing=False)
 
