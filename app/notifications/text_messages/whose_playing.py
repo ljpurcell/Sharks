@@ -17,12 +17,18 @@ if now.weekday() == 6 and now.hour == 7:
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
 
-        confirmed_playing: list[User] = db.session.scalars(
-            db.select(GameRSVP).filter_by(game_date=NextGame.date_str, is_playing=True)).all() # TODO 
-    
+        confirmed_playing: list[str] = db.session.scalars(
+            db.select(User.username)
+            .join(GameRSVP, User.id==GameRSVP.user_id)
+            .filter_by(GameRSVP.game_date=NextGame.date_str, GameRSVP.is_playing=True))
+            .all() # TODO 
+         
 
-        confirmed_out: list[User] = db.session.scalars(db.select(GameRSVP).filter_by(
-            game_date=NextGame.date_str, is_playing=False)).all()  # TODO
+        confirmed_out: list[str] = db.session.scalars(
+            db.select(User.username)
+            .join(GameRSVP, User.id==GameRSVP.user_id)
+            .filter_by(GameRSVP.game_date=NextGame.date_str, GameRSVP.is_playing=True))
+            .all() # TODO 
 
         message_body: str = "Playing: " + json.dumps(confirmed_playing) + \
             "\n\nNot playing: " + json.dumps(confirmed_out)
@@ -34,4 +40,4 @@ if now.weekday() == 6 and now.hour == 7:
                         body=message_body,
                         from_=app.config['TWILIO_PHONE_NUMBER'],
                         to=team_member.mobile
-                    )
+                    ) 
