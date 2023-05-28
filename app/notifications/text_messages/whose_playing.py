@@ -2,7 +2,7 @@ from datetime import datetime
 now = datetime.now()
 
 # Sunday (6) at 5pm (7am UTC)
-if now.weekday() == 6 and now.hour == 7:
+if now.weekday() == 6 and now.hour == 7 or True:
     from twilio.rest import Client
     from app.auth.models.user import User, GameRSVP
     from app.schedule.next_and_prev_game import NextGame
