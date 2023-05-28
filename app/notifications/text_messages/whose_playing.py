@@ -21,16 +21,16 @@ if now.weekday() == 6 and now.hour == 7 or True:
         playing_query = db.select(User.username).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==date).where(GameRSVP.is_playing==True)
         
         print(playing_query)
-        playing_users: list[str] = db.session.execute(playing_query)
+        playing_users = db.session.execute(playing_query)
 
-        out_users: list[str] = db.session.execute(
+        out_users = db.session.execute(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .where(GameRSVP.game_date==GameRSVP.game_date==date)
             .where(GameRSVP.is_playing==False))
     
 
-        message_body: str = "Playing: " + json.dumps(playing_users) + "\n\nNot playing: " + json.dumps(out_users)
+        message_body: str = "Playing: " + playing_users + "\n\nNot playing: " + out_users
 
         if not NextGame.is_bye:
             for team_member in team_members:
