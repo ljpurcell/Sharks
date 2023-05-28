@@ -17,14 +17,14 @@ if now.weekday() == 6 and now.hour == 7 or True:
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
 
-        confirmed_playing: list[str] = db.session.scalars(
+        confirmed_playing: list[str] = db.session.execute(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .where(GameRSVP.game_date==NextGame.date_str)
             .where(GameRSVP.is_playing==True)).all() # TODO 
          
 
-        confirmed_out: list[str] = db.session.scalars(
+        confirmed_out: list[str] = db.session.execute(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .where(GameRSVP.game_date==NextGame.date_str)
