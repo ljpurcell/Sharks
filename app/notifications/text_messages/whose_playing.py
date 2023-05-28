@@ -17,18 +17,25 @@ if now.weekday() == 6 and now.hour == 7 or True:
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
 
-        confirmed_playing: list[str] = db.session.scalars(
-            db.select(User.username)
-            .join(GameRSVP, User.id==GameRSVP.user_id)
-            .where(GameRSVP.game_date==NextGame.date_str)
-            .where(GameRSVP.is_playing==True))
-         
+        playing_query = db.select(User).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==NextGame.date_str).where(GameRSVP.is_playing==True)
+        
+        print(playing_query)
+        playing_users: list[User] = db.session.execute(playing_query)
 
-        confirmed_out: list[str] = db.session.scalars(
+        out_users: list[User] = db.session.execute(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .where(GameRSVP.game_date==NextGame.date_str)
             .where(GameRSVP.is_playing==False))
+        
+        confirmed_playing = []
+        confirmed_out = []
+
+        for user in playing_users:
+            confirmed_playing.append(user.username)
+
+        for user in out_users:
+            confirmed_out.append(user.username)
 
         message_body: str = "Playing: " + json.dumps(confirmed_playing) + "\n\nNot playing: " + json.dumps(confirmed_out)
 
