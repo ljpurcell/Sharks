@@ -30,7 +30,7 @@ if now.weekday() == 6 and now.hour == 7 or True:
             .where(GameRSVP.is_playing==False)).all()
     
 
-        message_body: str = "Playing: " + playing_users + "\n\nNot playing: " + out_users
+        message_body: str = "Playing: " + json.dumps(playing_users) + "\n\nNot playing: " + json.dumps(out_users)
 
         if not NextGame.is_bye:
             for team_member in team_members:
