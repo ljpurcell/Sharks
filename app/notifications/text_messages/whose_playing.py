@@ -2,7 +2,7 @@ from datetime import datetime
 now = datetime.now()
 
 # Sunday (6) at 5pm (7am UTC)
-if now.weekday() == 6 and now.hour == 7 or True:
+if now.weekday() == 6 and now.hour == 7:
     from twilio.rest import Client
     from app.auth.models.user import User, GameRSVP
     from app.schedule.next_and_prev_game import NextGame
@@ -33,13 +33,12 @@ if now.weekday() == 6 and now.hour == 7 or True:
         playing_users = [user[0] for user in playing_users]
         out_users = [user[0] for user in out_users]
 
-        message_body: str = "Playing: " + json.dumps(playing_users) + "\n\nNot playing: " + json.dumps(out_users)
+        message_body: str = "Confirmed playing: " + json.dumps(playing_users) + "\n\nConfirmed out: " + json.dumps(out_users)
 
         if not NextGame.is_bye:
             for team_member in team_members:
-                if team_member.username == "Lyndon":
-                    message = client.messages.create(
-                        body=message_body,
-                        from_=app.config['TWILIO_PHONE_NUMBER'],
-                        to=team_member.mobile
-                    ) 
+                message = client.messages.create(
+                    body=message_body,
+                    from_=app.config['TWILIO_PHONE_NUMBER'],
+                    to=team_member.mobile
+                ) 
