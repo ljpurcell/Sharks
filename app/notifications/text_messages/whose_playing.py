@@ -18,16 +18,16 @@ if now.weekday() == 6 and now.hour == 7 or True:
         team_members: list[User] = db.session.scalars(db.select(User)).all()
         day, date = NextGame.date_str.split(' ')
 
-        playing_query = db.select(User.username).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==date).where(GameRSVP.is_playing==True)
+        playing_query = db.select(User.username).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==date).where(GameRSVP.is_playing==True).all()
         
         print(playing_query)
         playing_users = db.session.execute(playing_query)
 
-        out_users = db.session.execute(
+        out_users = db.session.scalars(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .where(GameRSVP.game_date==GameRSVP.game_date==date)
-            .where(GameRSVP.is_playing==False))
+            .where(GameRSVP.is_playing==False)).all()
     
 
         message_body: str = "Playing: " + playing_users + "\n\nNot playing: " + out_users
