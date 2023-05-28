@@ -20,15 +20,13 @@ if now.weekday() == 6 and now.hour == 7:
         confirmed_playing: list[str] = db.session.scalars(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
-            .filter_by(game_date=NextGame.date_str, is_playing=True))
-            .all() # TODO 
+            .filter_by(game_date=NextGame.date_str, is_playing=True)).all() # TODO 
          
 
         confirmed_out: list[str] = db.session.scalars(
             db.select(User.username)
             .join(GameRSVP, User.id==GameRSVP.user_id)
-            .filter_by(game_date=NextGame.date_str, is_playing=False))
-            .all() # TODO 
+            .filter_by(game_date=NextGame.date_str, is_playing=False)).all() # TODO 
 
         message_body: str = "Playing: " + json.dumps(confirmed_playing) + \
             "\n\nNot playing: " + json.dumps(confirmed_out)
