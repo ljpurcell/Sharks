@@ -16,16 +16,17 @@ if now.weekday() == 6 and now.hour == 7 or True:
             app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
 
         team_members: list[User] = db.session.scalars(db.select(User)).all()
+        day, date = NextGame.date_str.split(' ')
 
-        playing_query = db.select(User).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==NextGame.date_str).where(GameRSVP.is_playing==True)
+        playing_query = db.select(User).join(GameRSVP, User.id==GameRSVP.user_id).where(GameRSVP.game_date==date).where(GameRSVP.is_playing==True)
         
         print(playing_query)
         playing_users: list[User] = db.session.execute(playing_query)
 
         out_users: list[User] = db.session.execute(
-            db.select(User.username)
+            db.select(User)
             .join(GameRSVP, User.id==GameRSVP.user_id)
-            .where(GameRSVP.game_date==NextGame.date_str)
+            .where(GameRSVP.game_date==GameRSVP.game_date==date)
             .where(GameRSVP.is_playing==False))
         
         confirmed_playing = []
