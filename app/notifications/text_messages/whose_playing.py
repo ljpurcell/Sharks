@@ -28,8 +28,8 @@ if now.weekday() == 6 and now.hour == 7:
             .join(GameRSVP, User.id==GameRSVP.user_id)
             .filter_by(game_date=NextGame.date_str, is_playing=False)).all() # TODO 
 
-        message_body: str = "Playing: " + json.dumps(confirmed_playing) + \
-            "\n\nNot playing: " + json.dumps(confirmed_out)
+        message_body: str = "Playing: " 
+        #+ json.dumps(confirmed_playing) + "\n\nNot playing: " + json.dumps(confirmed_out)
 
         if not NextGame.is_bye:
             for team_member in team_members:
