@@ -2,7 +2,7 @@ from datetime import datetime
 now = datetime.now()
 
 # Tuesday (1) at 11am (1 UTC)
-if now.weekday() == 1 and now.hour == 1:
+if now.weekday() == 1:
     from twilio.rest import Client
     from os import environ as env
     from app.auth.models.user import User
