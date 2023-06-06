@@ -39,7 +39,7 @@ def record_votes():
             new_assignment.season_id = data['season']
             new_assignment.round = round_number
             new_assignment.vote_giver = current_user.id
-            vote_getter = db.session.scalars(db.select(User).filter_by(username=assignment['player'])).first() 
+            vote_getter = db.session.scalars(db.select(User).where(User.username==assignment['player'])).first() 
             new_assignment.vote_getter = vote_getter.id
             new_assignment.num_votes = assignment['votes']
             db.session.add(new_assignment)
