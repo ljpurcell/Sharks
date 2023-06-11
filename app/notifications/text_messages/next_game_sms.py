@@ -13,7 +13,7 @@ if now.weekday() == 6 and now.hour == 1:
 
     def generate_message_body(next_game: Game, app) -> str:
         if next_game is None:
-            message_body = "Well done on the season -- thanks for being a part of this cut-throat unit... Got the whole world is looking like shark bait at the minute!\n\nBe sure to rest up and hit the practice court in the off-season.\n\nStay tuned for Sharks Brownlow."
+            message_body = "Well done on the season -- thanks for being a part of this cut-throat unit... Got the whole world looking like shark bait at the minute!\n\nBe sure to rest up and hit the practice court in the off-season.\n\nStay tuned for Sharks Brownlow."
         elif next_game.is_bye:
             message_body = next_game.round + " - " + \
                 next_game.date_str + "\n\n" + next_game.teams
