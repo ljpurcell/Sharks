@@ -42,7 +42,7 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     def create_game(round: Tag) -> Game:
         ssn: str = env.get('SEASON_ID')
-        rnd: str = round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}).text if round.find("h3", {
+        rnd: str = round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 gFDgrP fLyUTG"}).text if round.find("h3", {
             "class": "sc-bqGHjH sc-10c3c88-1 kqnzOo bFFhqL"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"}).text
         if rnd == "Fixture has not yet been confirmed, dates and rounds are subject to change.":
             dt: datetime | None = None
