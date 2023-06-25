@@ -25,7 +25,7 @@ def create_season(rounds: PageElement) -> list[Game]:
         from datetime import datetime
 
         dt: Tag | NavigableString | None = round.find(
-            "span", {"class": "sc-bqGHjH cUXLAP"})
+            "span", {"class": "sc-cPiKLX emDkPM"})
         if not dt:
             # Game is a BYE and just has a date
             d: Tag | NavigableString | None = round.find(
