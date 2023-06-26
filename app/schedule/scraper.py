@@ -33,7 +33,7 @@ def create_season(rounds: PageElement) -> list[Game]:
             return datetime.strptime(d.text, "%A, %d %B %Y")
         else:
             # Game is not a BYE and has both date and time
-            return datetime.strptime(dt.text, "%I:%M %p, %a, %d %b %y")
+            return datetime.strptime(dt.text, "%A, %d %B %Y")
 
     def get_teams(round: Tag) -> str:
         tms: ResultSet[Tag] = round.find_all(
