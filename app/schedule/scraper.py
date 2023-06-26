@@ -25,7 +25,7 @@ def create_season(rounds: PageElement) -> list[Game]:
         from datetime import datetime
 
         dt: Tag | NavigableString | None = round.find(
-            "span", {"class": "sc-cPiKLX emDkPM"})
+            "span", {"class": "sc-cPiKLX dTddCR"})
         if not dt:
             # Game is a BYE and just has a date
             d: Tag | NavigableString | None = round.find(
@@ -33,7 +33,7 @@ def create_season(rounds: PageElement) -> list[Game]:
             return datetime.strptime(d.text, "%A, %d %B %Y")
         else:
             # Game is not a BYE and has both date and time
-            return datetime.strptime(dt.text, "%A, %d %B %Y")
+            return datetime.strptime(dt.text, "%I:%M %p, %a, %d %b %y")
 
     def get_teams(round: Tag) -> str:
         tms: ResultSet[Tag] = round.find_all(
