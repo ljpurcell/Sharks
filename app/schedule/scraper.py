@@ -37,7 +37,7 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     def get_teams(round: Tag) -> str:
         tms: ResultSet[Tag] = round.find_all(
-            "a", {"class": "sc-bqGHjH sc-12j2xsj-3 uheqx gnPplJ"})
+            "a", {"class": "sc-jEACwC sc-12j2xsj-3 dRqyQz cdnZHA"})
         return "Bull Sharks - BYE" if len(tms) < 2 else f"{tms[0].text} vs. {tms[1].text}"
 
     def create_game(round: Tag) -> Game:
