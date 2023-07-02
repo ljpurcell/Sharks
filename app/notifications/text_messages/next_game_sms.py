@@ -1,5 +1,8 @@
 from datetime import datetime
-now = datetime.now()
+from zoneinfo import ZoneInfo
+
+melb_timezone = ZoneInfo("Australia/Melbourne") 
+now = datetime.now(tz=melb_timezone)
 
 # Sunday at 11am
 if now.weekday() == 6 and now.hour == 11:
