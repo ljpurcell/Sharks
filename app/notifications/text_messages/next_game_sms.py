@@ -1,8 +1,8 @@
 from datetime import datetime
 now = datetime.now()
 
-# Sunday (6) at 11am (1am UTC)
-if now.weekday() == 6 and now.hour == 1 or True: # TODO remove
+# Sunday at 11am
+if now.weekday() == 6 and now.hour == 11:
     from app.schedule.next_and_prev_game import NextGame
     from app.auth.models.user import User
     from twilio.rest import Client
@@ -31,11 +31,8 @@ if now.weekday() == 6 and now.hour == 1 or True: # TODO remove
         team_members: list[User] = db.session.scalars(db.select(User)).all()
         
         for team_member in team_members:
-            if team_member.username == "Lyndon": # TODO remove
-                print("We are creating it")
-                message = client.messages.create(
-                    body=generate_message_body(NextGame, app),
-                    from_=app.config['TWILIO_PHONE_NUMBER'],
-                    to=team_member.mobile
-                )
-                print(message.sid)
+            message = client.messages.create(
+                body=generate_message_body(NextGame, app),
+                from_=app.config['TWILIO_PHONE_NUMBER'],
+                to=team_member.mobile
+            )
