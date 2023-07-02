@@ -1,8 +1,12 @@
 from datetime import datetime
-now = datetime.now()
+from zoneinfo import ZoneInfo
 
-# Sunday (6) at 5pm (7am UTC)
-if now.weekday() == 6 and now.hour == 7:
+melb_timezone = ZoneInfo("Australia/Melbourne") 
+now = datetime.now(tz=melb_timezone)
+
+
+# Sunday at 5pm 
+if now.weekday() == 6 and now.hour == 17:
     from twilio.rest import Client
     from app.auth.models.user import User, GameRSVP
     from app.schedule.next_and_prev_game import NextGame

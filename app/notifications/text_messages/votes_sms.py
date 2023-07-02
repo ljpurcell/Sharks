@@ -1,8 +1,11 @@
 from datetime import datetime
-now = datetime.now()
+from zoneinfo import ZoneInfo
 
-# Tuesday (1) at 11am (1 UTC)
-if now.weekday() == 1 and now.time == 1:
+melb_timezone = ZoneInfo("Australia/Melbourne") 
+now = datetime.now(tz=melb_timezone)
+
+# Tuesday at 11am 
+if now.weekday() == 1 and now.time == 11:
     from twilio.rest import Client
     from os import environ as env
     from app.auth.models.user import User
