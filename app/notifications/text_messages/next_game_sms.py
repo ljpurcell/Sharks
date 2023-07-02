@@ -32,8 +32,10 @@ if now.weekday() == 6 and now.hour == 1 or True: # TODO remove
         
         for team_member in team_members:
             if team_member == "Lyndon": # TODO remove
+                print("We are creating it")
                 message = client.messages.create(
                     body=generate_message_body(NextGame, app),
                     from_=app.config['TWILIO_PHONE_NUMBER'],
                     to=team_member.mobile
                 )
+                print(message.sid)
