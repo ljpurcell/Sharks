@@ -31,7 +31,7 @@ if now.weekday() == 6 and now.hour == 1 or True: # TODO remove
         team_members: list[User] = db.session.scalars(db.select(User)).all()
         
         for team_member in team_members:
-            if team_member == "Lyndon": # TODO remove
+            if team_member.username == "Lyndon": # TODO remove
                 print("We are creating it")
                 message = client.messages.create(
                     body=generate_message_body(NextGame, app),
