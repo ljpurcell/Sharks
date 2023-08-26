@@ -38,11 +38,12 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     def get_teams(round: Tag) -> str:
         tms: ResultSet[Tag] = round.find_all(
-            "a", {"class": "sc-jEACwC sc-12j2xsj-3 dRqyQz cdnZHA"})
+            "a", {"class": "sc-jEACwC sc-12j2xsj-3 iXloFG cdnZHA"})
         return "Bull Sharks - BYE" if len(tms) < 2 else f"{tms[0].text} vs. {tms[1].text}"
 
     def create_game(round: Tag) -> Game:
         ssn: str = env.get('SEASON_ID')
+        # If site changes, will need to update class tags used here
         rnd_tag = round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) if round.find("h3", {
             "class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"})
         if rnd_tag:
@@ -54,6 +55,8 @@ def create_season(rounds: PageElement) -> list[Game]:
                 tms: str | None = None
             else:
                 dt: datetime | None = get_date_time(round)
+
+                # If site changes, will need to update class tags used here
                 loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}
                                                       ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}).text
                 tms: str | None = get_teams(round)
