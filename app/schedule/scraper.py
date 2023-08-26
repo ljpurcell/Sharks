@@ -54,8 +54,8 @@ def create_season(rounds: PageElement) -> list[Game]:
                 tms: str | None = None
             else:
                 dt: datetime | None = get_date_time(round)
-                loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}
-                                                      ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}).text
+                loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}
+                                                      ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}).text
                 tms: str | None = get_teams(round)
         else:
             notify_developer()
