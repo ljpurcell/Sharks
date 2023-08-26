@@ -2,6 +2,7 @@ from os import environ as env
 from .game import Game
 from bs4 import BeautifulSoup, Tag, NavigableString, ResultSet, PageElement
 from datetime import datetime
+from app.notifications.text_messages.notify_developer import notify_developer
 
 
 def scrape_site(url: str | None):
@@ -42,17 +43,23 @@ def create_season(rounds: PageElement) -> list[Game]:
 
     def create_game(round: Tag) -> Game:
         ssn: str = env.get('SEASON_ID')
-        rnd: str = round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 gFDgrP fLyUTG"}).text if round.find("h3", {
-            "class": "sc-jEACwC sc-10c3c88-1 gFDgrP fLyUTG"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"}).text
-        if rnd == "Fixture has not yet been confirmed, dates and rounds are subject to change.":
-            dt: datetime | None = None
-            loc: str | None = None
-            tms: str | None = None
+        rnd_tag = round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) if round.find("h3", {
+            "class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"})
+        if rnd_tag:
+            rnd = rnd_tag.text
+
+            if rnd == "Fixture has not yet been confirmed, dates and rounds are subject to change.":
+                dt: datetime | None = None
+                loc: str | None = None
+                tms: str | None = None
+            else:
+                dt: datetime | None = get_date_time(round)
+                loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}
+                                                      ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}).text
+                tms: str | None = get_teams(round)
         else:
-            dt: datetime | None = get_date_time(round)
-            loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}
-                                                  ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 fQCABI gIKUwU"}).text
-            tms: str | None = get_teams(round)
+            notify_developer()
+
         return Game(ssn, rnd, dt, loc, tms)
 
     season: list[Game] = []
