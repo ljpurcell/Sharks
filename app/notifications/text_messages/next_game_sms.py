@@ -1,8 +1,6 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from prod.lib.python3.10.site-packages.sqlalchemy.sql.elements import True_
-
 melb_timezone = ZoneInfo("Australia/Melbourne") 
 now = datetime.now(tz=melb_timezone)
 
