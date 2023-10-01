@@ -45,7 +45,7 @@ def create_season(rounds: PageElement) -> list[Game]:
         ssn: str = env.get('SEASON_ID')
         # If site changes, will need to update class tags used here
         rnd_tag = round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) if round.find("h3", {
-            "class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) else round.find("h3", {"class": "sc-bqGHjH sc-10c3c88-1 bJxBxZ bFFhqL"})
+            "class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"}) else round.find("h3", {"class": "sc-jEACwC sc-10c3c88-1 fLTgUy fLyUTG"})
         if rnd_tag:
             rnd = rnd_tag.text
 
