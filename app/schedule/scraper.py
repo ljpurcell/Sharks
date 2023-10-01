@@ -63,7 +63,7 @@ def create_season(rounds: PageElement) -> list[Game]:
 
             return Game(ssn, rnd, dt, loc, tms)
         else:
-            notify_developer()
+            # notify_developer()
 
 
     season: list[Game] = []
