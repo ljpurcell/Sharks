@@ -60,10 +60,11 @@ def create_season(rounds: PageElement) -> list[Game]:
                 loc: str | None = "BYE" if round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}
                                                       ) == None else round.find("a", {"class": "sc-jEACwC sc-10c3c88-16 dDYSmJ gIKUwU"}).text
                 tms: str | None = get_teams(round)
+
+            return Game(ssn, rnd, dt, loc, tms)
         else:
             notify_developer()
 
-        return Game(ssn, rnd, dt, loc, tms)
 
     season: list[Game] = []
     for round in rounds:
